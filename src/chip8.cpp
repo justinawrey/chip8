@@ -89,12 +89,12 @@ void Chip8::exec_opcode(uint16_t opcode) {
             add_vx_vy(opcode); break;
         case Instruction::sub_vx_vy:
             sub_vx_vy(opcode); break;
-        case Instruction::shr_vx_vy:
-            shr_vx_vy(opcode); break;
+        case Instruction::shr_vx:
+            shr_vx(opcode); break;
         case Instruction::subn_vx_vy:
             subn_vx_vy(opcode); break;
-        case Instruction::shl_vx_vy:
-            shl_vx_vy(opcode); break;
+        case Instruction::shl_vx:
+            shl_vx(opcode); break;
         case Instruction::sne_vx_vy:
             sne_vx_vy(opcode); break;
         case Instruction::ld_i_addr:
@@ -166,8 +166,9 @@ void Chip8::sys_addr(uint16_t opcode) const {
       // in this implementation
 }
 
-void Chip8::cls(uint16_t opcode) const {
+void Chip8::cls(uint16_t opcode) {
     _display.clear_all_pixels();
+    _pc += 1;
 }
 
 void Chip8::ret(uint16_t opcode) {
@@ -183,69 +184,106 @@ void Chip8::call_addr(uint16_t opcode) {
 }
 
 void Chip8::se_vx_byte(uint16_t opcode) {
-
+    int x = apply_mask(0x0F00, opcode);
+    int byte = apply_mask(0x00FF, opcode);
+    _v[x] == byte ? _pc += 2 : _pc += 1;
 }
 
 void Chip8::sne_vx_byte(uint16_t opcode) {
-
+    int x = apply_mask(0x0F00, opcode);
+    int byte = apply_mask(0x00FF, opcode);
+    _v[x] != byte ? _pc += 2 : _pc += 1;
 }
 
 void Chip8::se_vx_vy(uint16_t opcode) {
-
+    int x = apply_mask(0x0F00, opcode);
+    int y = apply_mask(0x00F0, opcode);
+    _v[x] == _v[y] ? _pc += 2 : _pc += 1;
 }
 
 void Chip8::ld_vx_byte(uint16_t opcode) {
-    int target_reg = apply_mask(0x0F00, opcode);
-    _v[target_reg] = apply_mask(0x00FF, opcode);
+    int x = apply_mask(0x0F00, opcode);
+    _v[x] = apply_mask(0x00FF, opcode);
+    _pc += 1;    
 }
 
 void Chip8::add_vx_byte(uint16_t opcode) {
-    int target_reg  = apply_mask(0x0F00, opcode);
-    _v[target_reg] += apply_mask(0x00FF, opcode);    
+    int x  = apply_mask(0x0F00, opcode);
+    _v[x] += apply_mask(0x00FF, opcode);
+    _pc += 1;        
 }
 
 void Chip8::ld_vx_vy(uint16_t opcode) {
-    int target_reg = apply_mask(0x0F00, opcode);
-    _v[target_reg] = apply_mask(0x00F0, opcode);
+    int x = apply_mask(0x0F00, opcode);
+    int y = apply_mask(0x00F0, opcode);
+    _v[x] = _v[y];        
+    _pc += 1;    
 }
 
 void Chip8::or_vx_vy(uint16_t opcode) {
-    int target_reg  = apply_mask(0x0F00, opcode);
-    _v[target_reg] |= apply_mask(0x00F0, opcode); 
+    int x = apply_mask(0x0F00, opcode);
+    int y = apply_mask(0x00F0, opcode);
+    _v[x] |= _v[y];    
+    _pc += 1;     
 }
 
 void Chip8::and_vx_vy(uint16_t opcode) {
-    int target_reg  = apply_mask(0x0F00, opcode);
-    _v[target_reg] &= apply_mask(0x00F0, opcode); 
+    int x = apply_mask(0x0F00, opcode);
+    int y = apply_mask(0x00F0, opcode);
+    _v[x] &= _v[y];    
+    _pc += 1;     
 }
 
 void Chip8::xor_vx_vy(uint16_t opcode) {
-    int target_reg  = apply_mask(0x0F00, opcode);
-    _v[target_reg] ^= apply_mask(0x00F0, opcode); 
+    int x = apply_mask(0x0F00, opcode);
+    int y = apply_mask(0x00F0, opcode);
+    _v[x] ^= _v[y];
+    _pc += 1;     
 }
 
 void Chip8::add_vx_vy(uint16_t opcode) {
-
+    int x = apply_mask(0x0F00, opcode);
+    int y = apply_mask(0x00F0, opcode);
+    unsigned int total = static_cast<unsigned int>(_v[x]) + static_cast<unsigned int>(_v[y]);
+    total > 255 ? _v[0xF] = 1 : _v[0xF] = 0; // flag any overflows
+    _v[x] = total;
+    _pc += 1;
 }
 
 void Chip8::sub_vx_vy(uint16_t opcode) {
-
+    int x = apply_mask(0x0F00, opcode);
+    int y = apply_mask(0x00F0, opcode);
+    _v[x] > _v[y] ? _v[0xF] = 1 : _v[0xF] = 0; // flag any overflows
+    _v[x] -= _v[y];
+    _pc += 1;
 }
 
-void Chip8::shr_vx_vy(uint16_t opcode) {
-
+void Chip8::shr_vx(uint16_t opcode) {
+    int x = apply_mask(0x0F00, opcode);
+    _v[x] & 1 ? _v[0xF] = 1 : _v[0xF] = 0; // flag any overflows
+    _v[x] /= 2;
+    _pc += 1;
 }
 
 void Chip8::subn_vx_vy(uint16_t opcode) {
-
+    int x = apply_mask(0x0F00, opcode);
+    int y = apply_mask(0x00F0, opcode);
+    _v[y] > _v[x] ? _v[0xF] = 1 : _v[0xF] = 0;
+    _v[x] = _v[y] - _v[x];
+    _pc += 1;
 }
 
-void Chip8::shl_vx_vy(uint16_t opcode) {
-
+void Chip8::shl_vx(uint16_t opcode) {
+    int x = apply_mask(0x0F00, opcode);
+    _v[x] & 0x80 ? _v[0xF] = 1 : _v[0xF] = 0; // flag any overflows
+    _v[x] *= 2;
+    _pc += 1;
 }
 
 void Chip8::sne_vx_vy(uint16_t opcode) {
-
+    int x = apply_mask(0x0F00, opcode);
+    int y = apply_mask(0x00F0, opcode);
+    _v[x] != _v[y] ? _pc += 2 : _pc += 1;
 }
 
 void Chip8::ld_i_addr(uint16_t opcode) {
@@ -281,47 +319,54 @@ void Chip8::ld_vx_k(uint16_t opcode) {
 }
 
 void Chip8::ld_dt_vx(uint16_t opcode) {
-    int target_reg = apply_mask(0x0F00, opcode);
-    _dt = _v[target_reg];
+    int x = apply_mask(0x0F00, opcode);
+    _dt = _v[x];
+    _pc += 1;
 }
 
 void Chip8::ld_st_vx(uint16_t opcode) {
-    int target_reg = apply_mask(0x0F00, opcode);
-    _st = _v[target_reg];
+    int x = apply_mask(0x0F00, opcode);
+    _st = _v[x];
+    _pc += 1;
 }
 
 void Chip8::add_i_vx(uint16_t opcode) {
-    int target_reg = apply_mask(0x0F00, opcode);
-    _vi += _v[target_reg];    
+    int x = apply_mask(0x0F00, opcode);
+    _vi += _v[x];
+    _pc += 1;
 }
 
 void Chip8::ld_f_vx(uint16_t opcode) {
-    int target_reg = apply_mask(0x0F00, opcode);
-    _vi = 5 * target_reg; // each hex sprite is 5 bytes long
+    int x = apply_mask(0x0F00, opcode);
+    _vi = 5 * x; // each hex sprite is 5 bytes long
+    _pc += 1;
 }
 
 void Chip8::ld_b_vx(uint16_t opcode) {
-    int target_reg = apply_mask(0x0F00, opcode);
-    int bcd = _v[target_reg];
+    int x = apply_mask(0x0F00, opcode);
+    int bcd = _v[x];
     for (int i = 2; i >= 0; i--) {
         int digit = bcd % 10;
         _ram[_vi + i] = digit;
         bcd /= 10; // integer division
     }
+    _pc += 1;    
 }
 
 void Chip8::ld_start_at_i_vx(uint16_t opcode) {
-    int target_reg = apply_mask(0x0F00, opcode);
-    for (int i = 0; i <= target_reg; i++) {
-        _ram[_vi + i] = _v[target_reg];
+    int x = apply_mask(0x0F00, opcode);
+    for (int i = 0; i <= x; i++) {
+        _ram[_vi + i] = _v[x];
     }
+    _pc += 1;    
 }
 
 void Chip8::ld_vs_start_at_i(uint16_t opcode) {
-    int target_reg = apply_mask(0x0F00, opcode);
-    for (int i = 0; i <= target_reg; i++) {
-        _v[target_reg] = _ram[_vi + i];
+    int x = apply_mask(0x0F00, opcode);
+    for (int i = 0; i <= x; i++) {
+        _v[x] = _ram[_vi + i];
     }
+    _pc += 1;    
 }
 
 /******************* Public functions **************************/

@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <string>
 #include <map>
+#include <stack>
 
 #include "display.h"
 
@@ -102,7 +103,7 @@ enum class Instruction {
     // Set Vx = Vx - Vy, set VF = NOT borrow.
     // If Vx > Vy, then VF is set to 1, otherwise 0. Then Vy is subtracted from Vx, and the results stored in Vx.
     
-    shr_vx_vy,
+    shr_vx,
     // 8xy6 - SHR Vx {, Vy}
     // Set Vx = Vx SHR 1.
     // If the least-significant bit of Vx is 1, then VF is set to 1, otherwise 0. Then Vx is divided by 2.
@@ -112,7 +113,7 @@ enum class Instruction {
     // Set Vx = Vy - Vx, set VF = NOT borrow.
     // If Vy > Vx, then VF is set to 1, otherwise 0. Then Vx is subtracted from Vy, and the results stored in Vx.
     
-    shl_vx_vy,
+    shl_vx,
     // 8xyE - SHL Vx {, Vy}
     // Set Vx = Vx SHL 1.
     // If the most-significant bit of Vx is 1, then VF is set to 1, otherwise to 0. Then Vx is multiplied by 2.
@@ -216,7 +217,7 @@ private:
     uint16_t _vi;  // a 16 bit register for storing memory addresses
     uint8_t  _st;  // an 8 bit sound timer
     uint8_t  _dt;  // an 8 bit delay timer
-    uint8_t  _sp;  // an 8 bit stack pointer
+    uint8_t  _sp;  // an 8 bit stack pointer - allow up to 16 levels of subroutine nesting
     uint16_t _pc;  // a 16 bit program counter
     Display _display; // class using sfml to draw to screen
 
@@ -228,7 +229,7 @@ private:
 
     /** instruction functions **/
     inline void sys_addr(uint16_t opcode) const;
-    inline void cls(uint16_t opcode) const;
+    inline void cls(uint16_t opcode);
     inline void ret(uint16_t opcode);
     inline void jp_addr(uint16_t opcode);
     inline void call_addr(uint16_t opcode);
@@ -243,9 +244,9 @@ private:
     inline void xor_vx_vy(uint16_t opcode);
     inline void add_vx_vy(uint16_t opcode);
     inline void sub_vx_vy(uint16_t opcode);
-    inline void shr_vx_vy(uint16_t opcode);
+    inline void shr_vx(uint16_t opcode);
     inline void subn_vx_vy(uint16_t opcode);
-    inline void shl_vx_vy(uint16_t opcode);
+    inline void shl_vx(uint16_t opcode);
     inline void sne_vx_vy(uint16_t opcode);
     inline void ld_i_addr(uint16_t opcode);
     inline void jp_v0_addr(uint16_t opcode);

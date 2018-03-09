@@ -7,11 +7,14 @@ SFML_LIBS=-lsfml-graphics -lsfml-window -lsfml-system
 SRC = $(wildcard src/*.cpp)
 OBJ = $(patsubst src/%.cpp, obj/%.o, $(SRC))
 
-all: $(OBJ)
+all: build $(OBJ)
 	$(CC) $(CPP_FLAGS) $(OBJ) -o bin/chip8 $(SFML_LIBS) 
 
 obj/%.o: src/%.cpp
 	$(CC) $(CPP_FLAGS) -c $< -o $@
 
 clean:	
-	rm obj/*.o bin/chip8 
+	rm -rf obj/ bin/ 
+
+build:
+	@mkdir -p bin obj
