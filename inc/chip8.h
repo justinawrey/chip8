@@ -5,7 +5,7 @@
 #include <string>
 #include <map>
 
-#include "screen.h"
+#include "display.h"
 
 // Instruction descriptions taken from Cowgods Chip-8 techinal reference
 // http://devernay.free.fr/hacks/chip8/C8TECH10.HTM#2.2
@@ -209,7 +209,7 @@ private:
     const static int       _rom_offset;    // chip8 game roms start at byte 512 (0x200) 
     const static uint8_t   _char_data[80]; // char data stored in first 512 bytes of memory
     const static std::map<uint16_t, Instruction> _instr_map;
-    static uint16_t apply_mask(const uint16_t& mask, uint16_t opcode);
+    static uint16_t apply_mask(uint16_t mask, uint16_t opcode);
 
     uint8_t* const _ram;
     uint8_t  _v[16]; // chip8 has 16 general purpose 8-bit registers labelled v0-vF
@@ -218,50 +218,50 @@ private:
     uint8_t  _dt;  // an 8 bit delay timer
     uint8_t  _sp;  // an 8 bit stack pointer
     uint16_t _pc;  // a 16 bit program counter
-    Screen _screen; // class using sfml to draw to screen
+    Display _display; // class using sfml to draw to screen
 
     void clear_registers();
     void load_character_data() const;
-    void exec_opcode(const uint16_t& opcode);
+    void exec_opcode(uint16_t opcode);
     inline void decrement_st();
     inline void decrement_dt();
 
     /** instruction functions **/
-    inline void sys_addr(const uint16_t& opcode) const;
-    inline void cls(const uint16_t& opcode) const;
-    inline void ret(const uint16_t& opcode);
-    inline void jp_addr(const uint16_t& opcode);
-    inline void call_addr(const uint16_t& opcode);
-    inline void se_vx_byte(const uint16_t& opcode);
-    inline void sne_vx_byte(const uint16_t& opcode);
-    inline void se_vx_vy(const uint16_t& opcode);
-    inline void ld_vx_byte(const uint16_t& opcode);
-    inline void add_vx_byte(const uint16_t& opcode);
-    inline void ld_vx_vy(const uint16_t& opcode);
-    inline void or_vx_vy(const uint16_t& opcode);
-    inline void and_vx_vy(const uint16_t& opcode);
-    inline void xor_vx_vy(const uint16_t& opcode);
-    inline void add_vx_vy(const uint16_t& opcode);
-    inline void sub_vx_vy(const uint16_t& opcode);
-    inline void shr_vx_vy(const uint16_t& opcode);
-    inline void subn_vx_vy(const uint16_t& opcode);
-    inline void shl_vx_vy(const uint16_t& opcode);
-    inline void sne_vx_vy(const uint16_t& opcode);
-    inline void ld_i_addr(const uint16_t& opcode);
-    inline void jp_v0_addr(const uint16_t& opcode);
-    inline void rnd_vx_byte(const uint16_t& opcode);
-    inline void drw_vx_vy_nib(const uint16_t& opcode);
-    inline void skp_vx(const uint16_t& opcode);
-    inline void sknp_vx(const uint16_t& opcode);
-    inline void ld_vx_dt(const uint16_t& opcode);
-    inline void ld_vx_k(const uint16_t& opcode);
-    inline void ld_dt_vx(const uint16_t& opcode);
-    inline void ld_st_vx(const uint16_t& opcode);
-    inline void add_i_vx(const uint16_t& opcode);
-    inline void ld_f_vx(const uint16_t& opcode);
-    inline void ld_b_vx(const uint16_t& opcode);
-    inline void ld_start_at_i_vx(const uint16_t& opcode);
-    inline void ld_vs_start_at_i(const uint16_t& opcode);
+    inline void sys_addr(uint16_t opcode) const;
+    inline void cls(uint16_t opcode) const;
+    inline void ret(uint16_t opcode);
+    inline void jp_addr(uint16_t opcode);
+    inline void call_addr(uint16_t opcode);
+    inline void se_vx_byte(uint16_t opcode);
+    inline void sne_vx_byte(uint16_t opcode);
+    inline void se_vx_vy(uint16_t opcode);
+    inline void ld_vx_byte(uint16_t opcode);
+    inline void add_vx_byte(uint16_t opcode);
+    inline void ld_vx_vy(uint16_t opcode);
+    inline void or_vx_vy(uint16_t opcode);
+    inline void and_vx_vy(uint16_t opcode);
+    inline void xor_vx_vy(uint16_t opcode);
+    inline void add_vx_vy(uint16_t opcode);
+    inline void sub_vx_vy(uint16_t opcode);
+    inline void shr_vx_vy(uint16_t opcode);
+    inline void subn_vx_vy(uint16_t opcode);
+    inline void shl_vx_vy(uint16_t opcode);
+    inline void sne_vx_vy(uint16_t opcode);
+    inline void ld_i_addr(uint16_t opcode);
+    inline void jp_v0_addr(uint16_t opcode);
+    inline void rnd_vx_byte(uint16_t opcode);
+    inline void drw_vx_vy_nib(uint16_t opcode);
+    inline void skp_vx(uint16_t opcode);
+    inline void sknp_vx(uint16_t opcode);
+    inline void ld_vx_dt(uint16_t opcode);
+    inline void ld_vx_k(uint16_t opcode);
+    inline void ld_dt_vx(uint16_t opcode);
+    inline void ld_st_vx(uint16_t opcode);
+    inline void add_i_vx(uint16_t opcode);
+    inline void ld_f_vx(uint16_t opcode);
+    inline void ld_b_vx(uint16_t opcode);
+    inline void ld_start_at_i_vx(uint16_t opcode);
+    inline void ld_vs_start_at_i(uint16_t opcode);
 
 public:
     Chip8();

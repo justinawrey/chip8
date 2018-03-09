@@ -8,7 +8,7 @@
 #include <sstream>
 
 #include "../inc/chip8.h"
-#include "../inc/screen.h"
+#include "../inc/display.h"
 
 /** Static members **/
 
@@ -38,7 +38,7 @@ const std::map<uint16_t, Instruction> Chip8::_instr_map = {
 };
 
 /** Static functions **/
-uint16_t Chip8::apply_mask(const uint16_t& mask, uint16_t opcode) {
+uint16_t Chip8::apply_mask(uint16_t mask, uint16_t opcode) {
     std::bitset<16> bits_mask(mask);
     std::bitset<16> bits_opcode(opcode);
     bits_opcode &= bits_mask;
@@ -56,7 +56,7 @@ uint16_t Chip8::apply_mask(const uint16_t& mask, uint16_t opcode) {
  *  compiler will optimize this big switch statement
  *  to an array of function pointers
  * **/
-void Chip8::exec_opcode(const uint16_t& opcode) {
+void Chip8::exec_opcode(uint16_t opcode) {
     Instruction instr = _instr_map.find(opcode)->second;
     switch(instr) {
         case Instruction::cls:
@@ -160,147 +160,147 @@ void Chip8::load_character_data() const {
     }
 }
 
-void Chip8::sys_addr(const uint16_t& opcode) const {
+void Chip8::sys_addr(uint16_t opcode) const {
     ; // this function only had use in legacy chip-8 machines.
       // it is included here purely for completeness and is ignored
       // in this implementation
 }
 
-void Chip8::cls(const uint16_t& opcode) const {
-    _screen.clear_all_pixels();
+void Chip8::cls(uint16_t opcode) const {
+    _display.clear_all_pixels();
 }
 
-void Chip8::ret(const uint16_t& opcode) {
+void Chip8::ret(uint16_t opcode) {
 
 }
 
-void Chip8::jp_addr(const uint16_t& opcode) {
+void Chip8::jp_addr(uint16_t opcode) {
     _pc = apply_mask(0x0FFF, opcode);
 }
 
-void Chip8::call_addr(const uint16_t& opcode) {
+void Chip8::call_addr(uint16_t opcode) {
 
 }
 
-void Chip8::se_vx_byte(const uint16_t& opcode) {
+void Chip8::se_vx_byte(uint16_t opcode) {
 
 }
 
-void Chip8::sne_vx_byte(const uint16_t& opcode) {
+void Chip8::sne_vx_byte(uint16_t opcode) {
 
 }
 
-void Chip8::se_vx_vy(const uint16_t& opcode) {
+void Chip8::se_vx_vy(uint16_t opcode) {
 
 }
 
-void Chip8::ld_vx_byte(const uint16_t& opcode) {
+void Chip8::ld_vx_byte(uint16_t opcode) {
     int target_reg = apply_mask(0x0F00, opcode);
     _v[target_reg] = apply_mask(0x00FF, opcode);
 }
 
-void Chip8::add_vx_byte(const uint16_t& opcode) {
+void Chip8::add_vx_byte(uint16_t opcode) {
     int target_reg  = apply_mask(0x0F00, opcode);
     _v[target_reg] += apply_mask(0x00FF, opcode);    
 }
 
-void Chip8::ld_vx_vy(const uint16_t& opcode) {
+void Chip8::ld_vx_vy(uint16_t opcode) {
     int target_reg = apply_mask(0x0F00, opcode);
     _v[target_reg] = apply_mask(0x00F0, opcode);
 }
 
-void Chip8::or_vx_vy(const uint16_t& opcode) {
+void Chip8::or_vx_vy(uint16_t opcode) {
     int target_reg  = apply_mask(0x0F00, opcode);
     _v[target_reg] |= apply_mask(0x00F0, opcode); 
 }
 
-void Chip8::and_vx_vy(const uint16_t& opcode) {
+void Chip8::and_vx_vy(uint16_t opcode) {
     int target_reg  = apply_mask(0x0F00, opcode);
     _v[target_reg] &= apply_mask(0x00F0, opcode); 
 }
 
-void Chip8::xor_vx_vy(const uint16_t& opcode) {
+void Chip8::xor_vx_vy(uint16_t opcode) {
     int target_reg  = apply_mask(0x0F00, opcode);
     _v[target_reg] ^= apply_mask(0x00F0, opcode); 
 }
 
-void Chip8::add_vx_vy(const uint16_t& opcode) {
+void Chip8::add_vx_vy(uint16_t opcode) {
 
 }
 
-void Chip8::sub_vx_vy(const uint16_t& opcode) {
+void Chip8::sub_vx_vy(uint16_t opcode) {
 
 }
 
-void Chip8::shr_vx_vy(const uint16_t& opcode) {
+void Chip8::shr_vx_vy(uint16_t opcode) {
 
 }
 
-void Chip8::subn_vx_vy(const uint16_t& opcode) {
+void Chip8::subn_vx_vy(uint16_t opcode) {
 
 }
 
-void Chip8::shl_vx_vy(const uint16_t& opcode) {
+void Chip8::shl_vx_vy(uint16_t opcode) {
 
 }
 
-void Chip8::sne_vx_vy(const uint16_t& opcode) {
+void Chip8::sne_vx_vy(uint16_t opcode) {
 
 }
 
-void Chip8::ld_i_addr(const uint16_t& opcode) {
+void Chip8::ld_i_addr(uint16_t opcode) {
 
 }
 
-void Chip8::jp_v0_addr(const uint16_t& opcode) {
+void Chip8::jp_v0_addr(uint16_t opcode) {
 
 }
 
-void Chip8::rnd_vx_byte(const uint16_t& opcode) {
+void Chip8::rnd_vx_byte(uint16_t opcode) {
 
 }
 
-void Chip8::drw_vx_vy_nib(const uint16_t& opcode) {
+void Chip8::drw_vx_vy_nib(uint16_t opcode) {
 
 }
 
-void Chip8::skp_vx(const uint16_t& opcode) {
+void Chip8::skp_vx(uint16_t opcode) {
 
 }
 
-void Chip8::sknp_vx(const uint16_t& opcode) {
+void Chip8::sknp_vx(uint16_t opcode) {
 
 }
 
-void Chip8::ld_vx_dt(const uint16_t& opcode) {
+void Chip8::ld_vx_dt(uint16_t opcode) {
 
 }
 
-void Chip8::ld_vx_k(const uint16_t& opcode) {
+void Chip8::ld_vx_k(uint16_t opcode) {
 
 }
 
-void Chip8::ld_dt_vx(const uint16_t& opcode) {
+void Chip8::ld_dt_vx(uint16_t opcode) {
     int target_reg = apply_mask(0x0F00, opcode);
     _dt = _v[target_reg];
 }
 
-void Chip8::ld_st_vx(const uint16_t& opcode) {
+void Chip8::ld_st_vx(uint16_t opcode) {
     int target_reg = apply_mask(0x0F00, opcode);
     _st = _v[target_reg];
 }
 
-void Chip8::add_i_vx(const uint16_t& opcode) {
+void Chip8::add_i_vx(uint16_t opcode) {
     int target_reg = apply_mask(0x0F00, opcode);
     _vi += _v[target_reg];    
 }
 
-void Chip8::ld_f_vx(const uint16_t& opcode) {
+void Chip8::ld_f_vx(uint16_t opcode) {
     int target_reg = apply_mask(0x0F00, opcode);
     _vi = 5 * target_reg; // each hex sprite is 5 bytes long
 }
 
-void Chip8::ld_b_vx(const uint16_t& opcode) {
+void Chip8::ld_b_vx(uint16_t opcode) {
     int target_reg = apply_mask(0x0F00, opcode);
     int bcd = _v[target_reg];
     for (int i = 2; i >= 0; i--) {
@@ -310,14 +310,14 @@ void Chip8::ld_b_vx(const uint16_t& opcode) {
     }
 }
 
-void Chip8::ld_start_at_i_vx(const uint16_t& opcode) {
+void Chip8::ld_start_at_i_vx(uint16_t opcode) {
     int target_reg = apply_mask(0x0F00, opcode);
     for (int i = 0; i <= target_reg; i++) {
         _ram[_vi + i] = _v[target_reg];
     }
 }
 
-void Chip8::ld_vs_start_at_i(const uint16_t& opcode) {
+void Chip8::ld_vs_start_at_i(uint16_t opcode) {
     int target_reg = apply_mask(0x0F00, opcode);
     for (int i = 0; i <= target_reg; i++) {
         _v[target_reg] = _ram[_vi + i];
@@ -327,7 +327,7 @@ void Chip8::ld_vs_start_at_i(const uint16_t& opcode) {
 /******************* Public functions **************************/
 
 Chip8::Chip8() : _ram(new uint8_t[_ram_size]), 
-                 _screen(Screen(64, 32, new sf::RenderWindow(sf::VideoMode(1200, 600), "CHIP8"))) {
+                 _display(Display(64, 32, new sf::RenderWindow(sf::VideoMode(1200, 600), "CHIP8"))) {
     clear_registers();
     load_character_data();
 }
@@ -370,7 +370,7 @@ void Chip8::dump_registers() const {
 }
 
 void Chip8::run() {
-    sf::RenderWindow* r_wind = _screen.get_render_window();
+    sf::RenderWindow* r_wind = _display.get_render_window();
     float micros_period = (1.0 / 60.0) * 1000000;    
 
     while (r_wind->isOpen())

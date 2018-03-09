@@ -4,7 +4,7 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
-class Screen {
+class Display {
 private:
     // we need to store pixel in order to be able to correctly set vf
     // flags when erasing a pixel by drawing on top of it as per chip8 spec
@@ -13,16 +13,16 @@ private:
     const int _y_res;
     sf::RenderWindow *  _render_window;
     
-    void set_px_to_screen(const int& x, const int& y,
+    void set_px_to_display(int x, int y,
         sf::Color& color) const;
         
 public:
-    Screen(const int& x_res, const int& y_res, sf::RenderWindow* render_window);
-    ~Screen();
+    Display(int x_res, int y_res, sf::RenderWindow* render_window);
+    ~Display();
     
     // sets pixel on the screen at coordinates x, y
     // returns true if pixel was already set before setting again
-    bool set_pixel(const int& x, const int& y);
+    bool set_pixel(int x, int y);
     void clear_all_pixels() const;
     sf::RenderWindow* get_render_window() const;
 };
