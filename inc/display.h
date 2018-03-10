@@ -23,6 +23,7 @@ public:
     // sets pixel on the screen at coordinates x, y
     // returns true if pixel was already set before setting again
     bool set_pixel(int x, int y);
+    bool set_byte(int x, int y, uint8_t byte);
     void clear_all_pixels() const;
     sf::RenderWindow* get_render_window() const;
 };

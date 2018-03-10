@@ -1,4 +1,6 @@
 #include <SFML/Graphics.hpp>
+#include <bitset>
+
 #include "../inc/display.h"
 
 Display::Display(int x_res, int y_res, sf::RenderWindow* render_window) : 
@@ -35,6 +37,17 @@ bool Display::set_pixel(int x, int y) {
         set_px_to_display(x, y, white);
     }
     return already_set;
+}
+
+bool Display::set_byte(int x, int y, uint8_t byte) {
+    std::bitset<8> byte_to_set(byte);
+    bool unset = false;
+    for (int i = 0; i < 8; i++) {
+        if (byte_to_set[7 - i]) {
+            unset = unset || set_pixel(x + i, y);
+        }
+    }
+    return unset;
 }
 
 void Display::clear_all_pixels() const {
