@@ -150,8 +150,8 @@ void Chip8::clear_registers() {
     _st = 0x0; 
     _dt = 0x0; 
     _vi = 0x0; 
-    _sp = 0x0;
-    _pc = 0x0;  
+    _pc = 0x0; 
+    while (!_sp.empty()) _sp.pop(); 
 }
 
 void Chip8::load_character_data() const {
@@ -172,7 +172,8 @@ void Chip8::cls(uint16_t opcode) {
 }
 
 void Chip8::ret(uint16_t opcode) {
-
+    _pc = _sp.top();
+    _sp.pop();
 }
 
 void Chip8::jp_addr(uint16_t opcode) {
@@ -180,7 +181,8 @@ void Chip8::jp_addr(uint16_t opcode) {
 }
 
 void Chip8::call_addr(uint16_t opcode) {
-
+    _sp.push(_pc);
+    _pc = apply_mask(0x0FFF, opcode);
 }
 
 void Chip8::se_vx_byte(uint16_t opcode) {
@@ -425,8 +427,8 @@ void Chip8::dump_registers() const {
     std::cout << "st: 0x" << std::hex << static_cast<unsigned int>(_st) << std::endl;
     std::cout << "dt: 0x" << std::hex << static_cast<unsigned int>(_dt) << std::endl;
     std::cout << "vi: 0x" << std::hex << static_cast<unsigned int>(_vi) << std::endl;
-    std::cout << "sp: 0x" << std::hex << static_cast<unsigned int>(_sp) << std::endl;
-    std::cout << "pc: 0x" << std::hex << static_cast<unsigned int>(_pc) << std::endl << std::endl;
+    std::cout << "pc: 0x" << std::hex << static_cast<unsigned int>(_pc) << std::endl; 
+    std::cout << "sp: 0x" << std::hex << static_cast<unsigned int>(_sp.top()) << std::endl << std::endl;
 }
 
 void Chip8::run() {

@@ -213,13 +213,13 @@ private:
     static uint16_t apply_mask(uint16_t mask, uint16_t opcode);
 
     uint8_t* const _ram;
-    uint8_t  _v[16]; // chip8 has 16 general purpose 8-bit registers labelled v0-vF
-    uint16_t _vi;  // a 16 bit register for storing memory addresses
-    uint8_t  _st;  // an 8 bit sound timer
-    uint8_t  _dt;  // an 8 bit delay timer
-    uint8_t  _sp;  // an 8 bit stack pointer - allow up to 16 levels of subroutine nesting
-    uint16_t _pc;  // a 16 bit program counter
-    Display _display; // class using sfml to draw to screen
+    uint8_t  _v[16];          // chip8 has 16 general purpose 8-bit registers labelled v0-vF
+    uint16_t _vi;             // a 16 bit register for storing memory addresses
+    uint8_t  _st;             // an 8 bit sound timer
+    uint8_t  _dt;             // an 8 bit delay timer
+    std::stack<uint8_t> _sp;  // an 8 bit stack pointer - allow up to 16 levels of subroutine nesting
+    uint16_t _pc;             // a 16 bit program counter
+    Display _display;         // class using sfml to draw to screen
 
     void clear_registers();
     void load_character_data() const;
