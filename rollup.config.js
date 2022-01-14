@@ -10,7 +10,6 @@ export default {
     format: 'es',
     plugins: [
       terser(),
-      brotli(),
       replaceHtmlVars({
         files: 'index.html',
         from: '/compiled/main.js',
