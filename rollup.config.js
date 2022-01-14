@@ -1,5 +1,4 @@
 import { terser } from 'rollup-plugin-terser'
-import brotli from 'rollup-plugin-brotli'
 import replaceHtmlVars from 'rollup-plugin-replace-html-vars'
 import copy from 'rollup-plugin-copy'
 
@@ -13,7 +12,7 @@ export default {
       replaceHtmlVars({
         files: 'index.html',
         from: '/compiled/main.js',
-        to: '/assets/bundle.min.js.br',
+        to: '/assets/bundle.min.js',
       }),
       copy({
         targets: [{ src: 'index.html', dest: 'dist' }],
