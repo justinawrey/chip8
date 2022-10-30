@@ -1,4 +1,9 @@
 {
+  "tasks": {
+    "bundle": "deno bundle src/main.ts static/dist/chip8.bundle.js",
+    "serve": "deno run --allow-net --allow-read https://deno.land/std@0.161.0/http/file_server.ts static",
+    "dev": "deno task bundle --watch & deno task serve"
+  },
   "compilerOptions": {
     "lib": [
       "dom",
