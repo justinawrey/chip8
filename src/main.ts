@@ -43,11 +43,11 @@ function mainLoop(): void {
 
 // Entry point to the program
 document.addEventListener("DOMContentLoaded", () => {
-  const startBtn = document.getElementById("start");
-  const stopBtn = document.getElementById("stop");
+  const startBtn = document.getElementById("start")!;
+  const stopBtn = document.getElementById("stop")!;
 
-  startBtn?.addEventListener("click", start);
-  stopBtn?.addEventListener("click", stop);
+  startBtn.addEventListener("click", start);
+  stopBtn.addEventListener("click", stop);
 
   const input = document.getElementsByTagName("input")[0];
   input.addEventListener("change", () => {
