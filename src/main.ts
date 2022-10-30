@@ -55,8 +55,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!file) return;
 
     stop();
-    file.arrayBuffer().then((buffer) => {
-      loadRom(buffer);
-    });
+    file.arrayBuffer().then(loadRom);
   });
 });
