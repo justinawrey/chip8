@@ -65,8 +65,6 @@ const ret: Instruction = () => {
  *
  * Jump to location nnn.
  * The interpreter sets the program counter to nnn.
- *
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
 const jpAddr: Instruction = ({ c, b, a }) => {
   registers.programCounter = (c << 8) | (b << 4) | a;
@@ -77,8 +75,6 @@ const jpAddr: Instruction = ({ c, b, a }) => {
  *
  * Call subroutine at nnn.
  * The interpreter increments the stack pointer, then puts the current PC on the top of the stack. The PC is then set to nnn.
- *
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
 const call: Instruction = ({ c, b, a }) => {
   stack.push(registers.programCounter);
@@ -90,8 +86,6 @@ const call: Instruction = ({ c, b, a }) => {
  *
  * Skip next instruction if Vx = kk.
  * The interpreter compares register Vx to kk, and if they are equal, increments the program counter by 2.
- *
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
 const seByte: Instruction = ({ c, b, a }) => {
   if (registers[reg(c)] === ((b << 4) | a)) {
@@ -104,8 +98,6 @@ const seByte: Instruction = ({ c, b, a }) => {
  *
  * Skip next instruction if Vx != kk.
  * The interpreter compares register Vx to kk, and if they are not equal, increments the program counter by 2.
- *
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
 const sneByte: Instruction = ({ c, b, a }) => {
   if (registers[reg(c)] !== ((b << 4) | a)) {
@@ -118,8 +110,6 @@ const sneByte: Instruction = ({ c, b, a }) => {
  *
  * Skip next instruction if Vx = Vy.
  * The interpreter compares register Vx to register Vy, and if they are equal, increments the program counter by 2.
- *
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
 const seReg: Instruction = ({ c, b }) => {
   if (registers[reg(c)] === registers[reg(b)]) {
@@ -132,8 +122,6 @@ const seReg: Instruction = ({ c, b }) => {
  *
  * Set Vx = kk.
  * The interpreter puts the value kk into register Vx.
- *
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
 const ldByte: Instruction = ({ c, b, a }) => {
   registers[reg(c)] = (b << 4) | a;
@@ -144,8 +132,6 @@ const ldByte: Instruction = ({ c, b, a }) => {
  *
  * Set Vx = Vx + kk.
  * Adds the value kk to the value of register Vx, then stores the result in Vx.
- *
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
 const addByte: Instruction = ({ c, b, a }) => {
   registers[reg(c)] += (b << 4) | a;
@@ -156,8 +142,6 @@ const addByte: Instruction = ({ c, b, a }) => {
  *
  * Set Vx = Vy.
  * Stores the value of register Vy in register Vx.
- *
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
 const ldVx: Instruction = ({ c, b }) => {
   registers[reg(c)] = registers[reg(b)];
@@ -169,8 +153,6 @@ const ldVx: Instruction = ({ c, b }) => {
  * Set Vx = Vx OR Vy.
  * Performs a bitwise OR on the values of Vx and Vy, then stores the result in Vx. A bitwise OR compares
  * the corresponding bits from two values, and if either bit is 1, then the same bit in the result is also 1. Otherwise, it is 0.
- *
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
 const or: Instruction = ({ c, b }) => {
   registers[reg(c)] |= registers[reg(b)];
@@ -182,8 +164,6 @@ const or: Instruction = ({ c, b }) => {
  * Set Vx = Vx AND Vy.
  * Performs a bitwise AND on the values of Vx and Vy, then stores the result in Vx. A bitwise AND compares
  * the corresponding bits from two values, and if both bits are 1, then the same bit in the result is also 1. Otherwise, it is 0.
- *
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
 const and: Instruction = ({ c, b }) => {
   registers[reg(c)] &= registers[reg(b)];
@@ -195,8 +175,6 @@ const and: Instruction = ({ c, b }) => {
  * Set Vx = Vx XOR Vy.
  * Performs a bitwise exclusive OR on the values of Vx and Vy, then stores the result in Vx. An exclusive OR compares
  * the corresponding bits from two values, and if the bits are not both the same, then the corresponding bit in the result is set to 1. Otherwise, it is 0.
- *
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
 const xor: Instruction = ({ c, b }) => {
   registers[reg(c)] ^= registers[reg(b)];
@@ -208,8 +186,6 @@ const xor: Instruction = ({ c, b }) => {
  * Set Vx = Vx + Vy, set VF = carry.
  * The values of Vx and Vy are added together. If the result is greater than 8 bits (i.e., > 255,) VF is set to 1, otherwise 0.
  * Only the lowest 8 bits of the result are kept, and stored in Vx.
- *
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
 const addReg: Instruction = ({ c, b }) => {
   const sum = registers[reg(c)] + registers[reg(b)];
@@ -223,8 +199,6 @@ const addReg: Instruction = ({ c, b }) => {
  *
  * Set Vx = Vx - Vy, set VF = NOT borrow.
  * If Vx > Vy, then VF is set to 1, otherwise 0. Then Vy is subtracted from Vx, and the results stored in Vx.
- *
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
 const sub: Instruction = ({ c, b }) => {
   const difference = registers[reg(c)] - registers[reg(b)];
@@ -238,8 +212,6 @@ const sub: Instruction = ({ c, b }) => {
  *
  * Set Vx = Vx SHR 1.
  * If the least-significant bit of Vx is 1, then VF is set to 1, otherwise 0. Then Vx is divided by 2.
- *
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
 const shr: Instruction = ({ c }) => {
   registers.vF = (registers[reg(c)] & 0x01) === 1 ? 1 : 0;
@@ -251,8 +223,6 @@ const shr: Instruction = ({ c }) => {
  *
  * Set Vx = Vy - Vx, set VF = NOT borrow.
  * If Vy > Vx, then VF is set to 1, otherwise 0. Then Vx is subtracted from Vy, and the results stored in Vx.
- *
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
 const subn: Instruction = ({ c, b }) => {
   const difference = registers[reg(b)] - registers[reg(c)];
@@ -262,13 +232,14 @@ const subn: Instruction = ({ c, b }) => {
 };
 
 /**
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
+ * 8xyE - SHL Vx {, Vy}
+ *
+ * Set Vx = Vx SHL 1.
+ * If the most-significant bit of Vx is 1, then VF is set to 1, otherwise to 0. Then Vx is multiplied by 2.
  */
 const shl: Instruction = (_nibbles) => {};
 
-/**
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
- */
+/** */
 const sne2: Instruction = (_nibbles) => {};
 
 /**
@@ -276,21 +247,15 @@ const sne2: Instruction = (_nibbles) => {};
  *
  * Set I = nnn.
  * The value of register I is set to nnn.
- *
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
 const ldi: Instruction = ({ c, b, a }) => {
   registers.addressIndex = (c << 8) | (b << 4) | a;
 };
 
-/**
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
- */
+/** */
 const jp2: Instruction = (_nibbles) => {};
 
-/**
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
- */
+/** */
 const rnd: Instruction = (_nibbles) => {};
 
 /**
@@ -302,8 +267,6 @@ const rnd: Instruction = (_nibbles) => {};
  * Sprites are XORed onto the existing screen. If this causes any pixels to be erased, VF
  * is set to 1, otherwise it is set to 0. If the sprite is positioned so part of it is
  * outside the coordinates of the display, it wraps around to the opposite side of the screen.
- *
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
 const drw: Instruction = ({ c, b, a }) => {
   const x = registers[reg(c)];
@@ -326,59 +289,37 @@ const drw: Instruction = ({ c, b, a }) => {
   });
 };
 
-/**
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
- */
+/** */
 const skp: Instruction = (_nibbles) => {};
 
-/**
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
- */
+/** */
 const sknp: Instruction = (_nibbles) => {};
 
-/**
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
- */
+/** */
 const ld4: Instruction = (_nibbles) => {};
 
-/**
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
- */
+/** */
 const ld5: Instruction = (_nibbles) => {};
 
-/**
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
- */
+/** */
 const ld6: Instruction = (_nibbles) => {};
 
-/**
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
- */
+/** */
 const ld7: Instruction = (_nibbles) => {};
 
-/**
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
- */
+/** */
 const add3: Instruction = (_nibbles) => {};
 
-/**
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
- */
+/** */
 const ld8: Instruction = (_nibbles) => {};
 
-/**
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
- */
+/** */
 const ld9: Instruction = (_nibbles) => {};
 
-/**
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
- */
+/** */
 const lda: Instruction = (_nibbles) => {};
 
-/**
- * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
- */
+/** */
 const ldb: Instruction = (_nibbles) => {};
 
 /**
