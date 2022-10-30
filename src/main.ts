@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
   startBtn?.addEventListener("click", start);
   stopBtn?.addEventListener("click", stop);
 
-  const input = document.getElementById("file") as HTMLInputElement;
+  const input = document.getElementsByTagName("input")[0];
   input.addEventListener("change", () => {
     const file = input.files?.[0];
     if (!file) return;

@@ -1,5 +1,5 @@
-const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+const canvas = document.getElementsByTagName("canvas")[0];
+const ctx = canvas.getContext("2d")!;
 
 // Each "chip8 tile" will be equivalent to 10 actual pixels in the browser.
 // This means that the canvas element in the browser has a true size of 640px by 320px.
