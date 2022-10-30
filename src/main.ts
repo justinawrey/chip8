@@ -1,5 +1,5 @@
 import registers, { resetRegisters } from "./registers.ts";
-import memoryMap, { clearRom, loadRom } from "./ram.ts";
+import memoryMap, { loadRom } from "./ram.ts";
 import executeInstruction from "./intructions.ts";
 import { clearDisplay } from "./display.ts";
 
@@ -10,10 +10,10 @@ const ONE_SECOND = 1000;
 
 let running: number | undefined;
 function limitExecutionSpeed(
-  cb: Function,
+  cb: () => void,
   limit: number = STABLE_EXEC_SPEED,
 ): void {
-  running = window.setInterval(cb, ONE_SECOND / limit);
+  running = setInterval(cb, ONE_SECOND / limit);
 }
 
 function start(): void {
@@ -23,7 +23,7 @@ function start(): void {
 }
 
 function stop(): void {
-  window.clearInterval(running);
+  clearInterval(running);
   running = undefined;
 
   resetRegisters();

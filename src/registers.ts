@@ -34,7 +34,7 @@ function reg(which: number): string {
 }
 
 function resetRegisters(): void {
-  for (let register in registers) {
+  for (const register in registers) {
     registers[register] = 0;
   }
 

@@ -264,12 +264,12 @@ const subn: Instruction = ({ c, b }) => {
 /**
  * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
-const shl: Instruction = (nibbles) => {};
+const shl: Instruction = (_nibbles) => {};
 
 /**
  * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
-const sne2: Instruction = (nibbles) => {};
+const sne2: Instruction = (_nibbles) => {};
 
 /**
  * Annn - LD I, addr
@@ -286,12 +286,12 @@ const ldi: Instruction = ({ c, b, a }) => {
 /**
  * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
-const jp2: Instruction = (nibbles) => {};
+const jp2: Instruction = (_nibbles) => {};
 
 /**
  * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
-const rnd: Instruction = (nibbles) => {};
+const rnd: Instruction = (_nibbles) => {};
 
 /**
  * Dxyn - DRW Vx, Vy, nibble
@@ -329,57 +329,57 @@ const drw: Instruction = ({ c, b, a }) => {
 /**
  * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
-const skp: Instruction = (nibbles) => {};
+const skp: Instruction = (_nibbles) => {};
 
 /**
  * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
-const sknp: Instruction = (nibbles) => {};
+const sknp: Instruction = (_nibbles) => {};
 
 /**
  * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
-const ld4: Instruction = (nibbles) => {};
+const ld4: Instruction = (_nibbles) => {};
 
 /**
  * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
-const ld5: Instruction = (nibbles) => {};
+const ld5: Instruction = (_nibbles) => {};
 
 /**
  * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
-const ld6: Instruction = (nibbles) => {};
+const ld6: Instruction = (_nibbles) => {};
 
 /**
  * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
-const ld7: Instruction = (nibbles) => {};
+const ld7: Instruction = (_nibbles) => {};
 
 /**
  * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
-const add3: Instruction = (nibbles) => {};
+const add3: Instruction = (_nibbles) => {};
 
 /**
  * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
-const ld8: Instruction = (nibbles) => {};
+const ld8: Instruction = (_nibbles) => {};
 
 /**
  * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
-const ld9: Instruction = (nibbles) => {};
+const ld9: Instruction = (_nibbles) => {};
 
 /**
  * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
-const lda: Instruction = (nibbles) => {};
+const lda: Instruction = (_nibbles) => {};
 
 /**
  * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
-const ldb: Instruction = (nibbles) => {};
+const ldb: Instruction = (_nibbles) => {};
 
 /**
  * Executes the given 2 byte intruction as specified by opcode.
