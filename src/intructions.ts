@@ -148,7 +148,7 @@ const ldByte: Instruction = ({ c, b, a }) => {
  * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
 const addByte: Instruction = ({ c, b, a }) => {
-  registers[reg(c)] = registers[reg(c)] + ((b << 4) | a);
+  registers[reg(c)] += (b << 4) | a;
 };
 
 /**
@@ -173,7 +173,7 @@ const ldVx: Instruction = ({ c, b }) => {
  * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
 const or: Instruction = ({ c, b }) => {
-  registers[reg(c)] = registers[reg(c)] | registers[reg(b)];
+  registers[reg(c)] |= registers[reg(b)];
 };
 
 /**
@@ -186,7 +186,7 @@ const or: Instruction = ({ c, b }) => {
  * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
 const and: Instruction = ({ c, b }) => {
-  registers[reg(c)] = registers[reg(c)] & registers[reg(b)];
+  registers[reg(c)] &= registers[reg(b)];
 };
 
 /**
@@ -199,7 +199,7 @@ const and: Instruction = ({ c, b }) => {
  * @param nibbles Object containing the 4 nibbles of two bytes from highest to lowest, labelled d, c, b, and a.
  */
 const xor: Instruction = ({ c, b }) => {
-  registers[reg(c)] = registers[reg(c)] ^ registers[reg(b)];
+  registers[reg(c)] ^= registers[reg(b)];
 };
 
 /**
