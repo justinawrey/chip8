@@ -1,7 +1,7 @@
-import registers, { resetRegisters } from "./registers.js";
-import memoryMap, { clearRom, loadRom } from "./ram.js";
-import executeInstruction from "./intructions.js";
-import { clearDisplay } from "./display.js";
+import registers, { resetRegisters } from "./registers.ts";
+import memoryMap, { clearRom, loadRom } from "./ram.ts";
+import executeInstruction from "./intructions.ts";
+import { clearDisplay } from "./display.ts";
 
 // Most chip8 programs perform well at
 // around 700 instructions per second.

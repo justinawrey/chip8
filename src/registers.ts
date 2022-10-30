@@ -1,4 +1,4 @@
-import { ROM_START } from "./ram.js";
+import { ROM_START } from "./ram.ts";
 
 type Registers = Record<string, number>;
 

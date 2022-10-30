@@ -1,6 +1,6 @@
-import { clearDisplay, toggleTile } from "./display.js";
-import memoryMap from "./ram.js";
-import registers, { reg, stack } from "./registers.js";
+import { clearDisplay, toggleTile } from "./display.ts";
+import memoryMap from "./ram.ts";
+import registers, { reg, stack } from "./registers.ts";
 
 interface Nibbles {
   // High nibble of the higher byte
