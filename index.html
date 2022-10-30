@@ -1,54 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script type="module" src="/compiled/main.js"></script>
-    <title>Chip 8</title>
-  </head>
 
-  <body>
-    <div class="main">
-      <div class="header">
-        <input type="file" id="file" name="file"/>
-        <button id="start">Start</button>
-        <button id="stop">Stop</button>
-      </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script type="module" src="/compiled/main.js"></script>
+  <title>Chip 8</title>
+</head>
 
-      <canvas id="canvas" width="640" height="320">
+<body>
+  <div class="main">
+    <div class="header">
+      <input type="file" id="file" name="file" />
+      <button id="start">Start</button>
+      <button id="stop">Stop</button>
     </div>
-  </body>
 
-  <style>
-    html {
-      height: 100%;
-    }
+    <canvas id="canvas" width="640" height="320">
+  </div>
+</body>
 
-    body {
-      display: flex;
-      margin: 0;
-      justify-content: center;
-      height: 100%;
-      align-items: center;
-    }
+<style>
+  html {
+    height: 100%;
+  }
 
-    #canvas {
-      border: 1px solid;
-    }
+  body {
+    display: flex;
+    margin: 0;
+    justify-content: center;
+    height: 100%;
+    align-items: center;
+  }
 
-    .main {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+  #canvas {
+    border: 1px solid;
+  }
 
-    .header {
-      width: 100%;
-      display: flex;
-    }
+  .main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
-    #start {
-      margin-left: auto
-    }
-  </style>
+  .header {
+    width: 100%;
+    display: flex;
+  }
+
+  #start {
+    margin-left: auto
+  }
+</style>
+
 </html>

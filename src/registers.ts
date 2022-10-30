@@ -1,8 +1,8 @@
-import { ROM_START } from './ram.js'
+import { ROM_START } from "./ram.js";
 
-type Registers = Record<string, number>
+type Registers = Record<string, number>;
 
-const stack: number[] = []
+const stack: number[] = [];
 const registers: Registers = {
   // General purpose numbers
   v0: 0,
@@ -27,18 +27,18 @@ const registers: Registers = {
   delayTimer: 0,
   soundTimer: 0,
   programCounter: ROM_START,
-}
+};
 
 function reg(which: number): string {
-  return `v${Number(which).toString(16).toUpperCase()}`
+  return `v${Number(which).toString(16).toUpperCase()}`;
 }
 
 function resetRegisters(): void {
   for (let register in registers) {
-    registers[register] = 0
+    registers[register] = 0;
   }
 
-  registers.programCounter = ROM_START
+  registers.programCounter = ROM_START;
 }
 
-export { registers as default, stack, resetRegisters, reg }
+export { reg, registers as default, resetRegisters, stack };
