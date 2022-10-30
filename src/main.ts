@@ -41,6 +41,7 @@ function mainLoop(): void {
   }
 }
 
+// Entry point to the program
 document.addEventListener("DOMContentLoaded", () => {
   const startBtn = document.getElementById("start");
   const stopBtn = document.getElementById("stop");
