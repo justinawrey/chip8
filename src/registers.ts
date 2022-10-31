@@ -33,6 +33,14 @@ function reg(which: number): string {
   return `v${Number(which).toString(16).toUpperCase()}`;
 }
 
+function nnn(c: number, b: number, a: number): number {
+  return (c << 8) | (b << 4) | a;
+}
+
+function kk(b: number, a: number): number {
+  return (b << 4) | a;
+}
+
 function resetRegisters(): void {
   for (const register in registers) {
     registers[register] = 0;
@@ -41,4 +49,4 @@ function resetRegisters(): void {
   registers.programCounter = ROM_START;
 }
 
-export { reg, registers as default, resetRegisters, stack };
+export { kk, nnn, reg, registers as default, resetRegisters, stack };

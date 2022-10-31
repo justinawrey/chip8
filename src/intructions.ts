@@ -1,6 +1,6 @@
 import { clearDisplay, toggleTile } from "./display.ts";
 import memoryMap from "./ram.ts";
-import registers, { reg, stack } from "./registers.ts";
+import registers, { kk, nnn, reg, stack } from "./registers.ts";
 
 interface Nibbles {
   // High nibble of the higher byte
@@ -67,7 +67,7 @@ const ret: Instruction = () => {
  * The interpreter sets the program counter to nnn.
  */
 const jpAddr: Instruction = ({ c, b, a }) => {
-  registers.programCounter = (c << 8) | (b << 4) | a;
+  registers.programCounter = nnn(c, b, a);
 };
 
 /**
@@ -78,7 +78,7 @@ const jpAddr: Instruction = ({ c, b, a }) => {
  */
 const call: Instruction = ({ c, b, a }) => {
   stack.push(registers.programCounter);
-  registers.programCounter = (c << 8) | (b << 4) | a;
+  registers.programCounter = nnn(c, b, a);
 };
 
 /**
@@ -88,7 +88,7 @@ const call: Instruction = ({ c, b, a }) => {
  * The interpreter compares register Vx to kk, and if they are equal, increments the program counter by 2.
  */
 const seByte: Instruction = ({ c, b, a }) => {
-  if (registers[reg(c)] === ((b << 4) | a)) {
+  if (registers[reg(c)] === kk(b, a)) {
     registers.programCounter += 2;
   }
 };
@@ -100,7 +100,7 @@ const seByte: Instruction = ({ c, b, a }) => {
  * The interpreter compares register Vx to kk, and if they are not equal, increments the program counter by 2.
  */
 const sneByte: Instruction = ({ c, b, a }) => {
-  if (registers[reg(c)] !== ((b << 4) | a)) {
+  if (registers[reg(c)] !== kk(b, a)) {
     registers.programCounter += 2;
   }
 };
@@ -124,7 +124,7 @@ const seReg: Instruction = ({ c, b }) => {
  * The interpreter puts the value kk into register Vx.
  */
 const ldByte: Instruction = ({ c, b, a }) => {
-  registers[reg(c)] = (b << 4) | a;
+  registers[reg(c)] = kk(b, a);
 };
 
 /**
@@ -134,7 +134,7 @@ const ldByte: Instruction = ({ c, b, a }) => {
  * Adds the value kk to the value of register Vx, then stores the result in Vx.
  */
 const addByte: Instruction = ({ c, b, a }) => {
-  registers[reg(c)] += (b << 4) | a;
+  registers[reg(c)] += kk(b, a);
 };
 
 /**
@@ -261,7 +261,7 @@ const sneReg: Instruction = ({ c, b }) => {
  * The value of register I is set to nnn.
  */
 const ldi: Instruction = ({ c, b, a }) => {
-  registers.addressIndex = (c << 8) | (b << 4) | a;
+  registers.addressIndex = nnn(c, b, a);
 };
 
 /**
@@ -271,7 +271,7 @@ const ldi: Instruction = ({ c, b, a }) => {
  * The program counter is set to nnn plus the value of V0.
  */
 const jpv0Addr: Instruction = ({ c, b, a }) => {
-  registers.programCounter = ((c << 8) | (b << 4) | a) + registers.v0;
+  registers.programCounter = nnn(c, b, a) + registers.v0;
 };
 
 /**
