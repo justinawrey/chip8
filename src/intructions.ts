@@ -281,7 +281,9 @@ const jpv0Addr: Instruction = ({ c, b, a }) => {
  * The interpreter generates a random number from 0 to 255, which is then ANDed with the value kk.
  * The results are stored in Vx. See instruction 8xy2 for more information on AND.
  */
-const rnd: Instruction = (_nibbles) => {};
+const rnd: Instruction = ({ c, b, a }) => {
+  registers[reg(c)] = Math.floor(Math.random() * 256) & kk(b, a);
+};
 
 /**
  * Dxyn - DRW Vx, Vy, nibble
@@ -336,7 +338,9 @@ const sknp: Instruction = (_nibbles) => {};
  * Set Vx = delay timer value.
  * The value of DT is placed into Vx.
  */
-const ldvxdt: Instruction = (_nibbles) => {};
+const ldvxdt: Instruction = ({ c }) => {
+  registers[reg(c)] = registers.delayTimer;
+};
 
 /**
  * Fx0A - LD Vx, K
@@ -352,7 +356,9 @@ const ldkey: Instruction = (_nibbles) => {};
  * Set delay timer = Vx.
  * DT is set equal to the value of Vx.
  */
-const lddtvx: Instruction = (_nibbles) => {};
+const lddtvx: Instruction = ({ c }) => {
+  registers.delayTimer = registers[reg(c)];
+};
 
 /**
  * Fx18 - LD ST, Vx
@@ -360,7 +366,9 @@ const lddtvx: Instruction = (_nibbles) => {};
  * Set sound timer = Vx.
  * ST is set equal to the value of Vx.
  */
-const ldstvx: Instruction = (_nibbles) => {};
+const ldstvx: Instruction = ({ c }) => {
+  registers.soundTimer = registers[reg(c)];
+};
 
 /**
  * Fx1E - ADD I, Vx
