@@ -248,7 +248,11 @@ const shl: Instruction = ({ c }) => {
  * Skip next instruction if Vx != Vy.
  * The values of Vx and Vy are compared, and if they are not equal, the program counter is increased by 2.
  */
-const sneReg: Instruction = (_nibbles) => {};
+const sneReg: Instruction = ({ c, b }) => {
+  if (registers[reg(c)] !== registers[reg(b)]) {
+    registers.programCounter += 2;
+  }
+};
 
 /**
  * Annn - LD I, addr
