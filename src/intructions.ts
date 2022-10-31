@@ -215,7 +215,7 @@ const sub: Instruction = ({ c, b }) => {
  */
 const shr: Instruction = ({ c }) => {
   registers.vF = (registers[reg(c)] & 0x01) === 1 ? 1 : 0;
-  registers[reg(c)] = registers[reg(c)] / 2;
+  registers[reg(c)] /= 2;
 };
 
 /**
@@ -237,7 +237,10 @@ const subn: Instruction = ({ c, b }) => {
  * Set Vx = Vx SHL 1.
  * If the most-significant bit of Vx is 1, then VF is set to 1, otherwise to 0. Then Vx is multiplied by 2.
  */
-const shl: Instruction = (_nibbles) => {};
+const shl: Instruction = ({ c }) => {
+  registers.vF = (registers[reg(c)] & 0x80) === 1 ? 1 : 0;
+  registers[reg(c)] *= 2;
+};
 
 /**
  * 9xy0 - SNE Vx, Vy
