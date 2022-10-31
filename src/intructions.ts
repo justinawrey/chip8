@@ -245,7 +245,7 @@ const shl: Instruction = (_nibbles) => {};
  * Skip next instruction if Vx != Vy.
  * The values of Vx and Vy are compared, and if they are not equal, the program counter is increased by 2.
  */
-const sne2: Instruction = (_nibbles) => {};
+const sneReg: Instruction = (_nibbles) => {};
 
 /**
  * Annn - LD I, addr
@@ -263,7 +263,7 @@ const ldi: Instruction = ({ c, b, a }) => {
  * Jump to location nnn + V0.
  * The program counter is set to nnn plus the value of V0.
  */
-const jp2: Instruction = (_nibbles) => {};
+const jpv0Addr: Instruction = (_nibbles) => {};
 
 /**
  * Cxkk - RND Vx, byte
@@ -327,7 +327,7 @@ const sknp: Instruction = (_nibbles) => {};
  * Set Vx = delay timer value.
  * The value of DT is placed into Vx.
  */
-const ld4: Instruction = (_nibbles) => {};
+const ldvxdt: Instruction = (_nibbles) => {};
 
 /**
  * Fx0A - LD Vx, K
@@ -335,7 +335,7 @@ const ld4: Instruction = (_nibbles) => {};
  * Wait for a key press, store the value of the key in Vx.
  * All execution stops until a key is pressed, then the value of that key is stored in Vx.
  */
-const ld5: Instruction = (_nibbles) => {};
+const ldkey: Instruction = (_nibbles) => {};
 
 /**
  * Fx15 - LD DT, Vx
@@ -343,7 +343,7 @@ const ld5: Instruction = (_nibbles) => {};
  * Set delay timer = Vx.
  * DT is set equal to the value of Vx.
  */
-const ld6: Instruction = (_nibbles) => {};
+const lddtvx: Instruction = (_nibbles) => {};
 
 /**
  * Fx18 - LD ST, Vx
@@ -351,7 +351,7 @@ const ld6: Instruction = (_nibbles) => {};
  * Set sound timer = Vx.
  * ST is set equal to the value of Vx.
  */
-const ld7: Instruction = (_nibbles) => {};
+const ldstvx: Instruction = (_nibbles) => {};
 
 /**
  * Fx1E - ADD I, Vx
@@ -359,15 +359,15 @@ const ld7: Instruction = (_nibbles) => {};
  * Set I = I + Vx.
  * The values of I and Vx are added, and the results are stored in I.
  */
-const add3: Instruction = (_nibbles) => {};
+const addivx: Instruction = (_nibbles) => {};
 
 /**
  * Fx29 - LD F, Vx
  *
  * Set I = location of sprite for digit Vx.
- * The value of I is set to the location for the hexadecimal sprite corresponding to the value of Vx.See section 2.4, Display, for more information on the Chip-8 hexadecimal font.
+ * The value of I is set to the location for the hexadecimal sprite corresponding to the value of Vx.
  */
-const ld8: Instruction = (_nibbles) => {};
+const ldfont: Instruction = (_nibbles) => {};
 
 /**
  * Fx33 - LD B, Vx
@@ -375,7 +375,7 @@ const ld8: Instruction = (_nibbles) => {};
  * Store BCD representation of Vx in memory locations I, I+1, and I+2.
  * The interpreter takes the decimal value of Vx, and places the hundreds digit in memory at location in I, the tens digit at location I+1, and the ones digit at location I+2.
  */
-const ld9: Instruction = (_nibbles) => {};
+const ldbcd: Instruction = (_nibbles) => {};
 
 /**
  * Fx55 - LD [I], Vx
@@ -456,7 +456,7 @@ function executeInstruction(opcode: number): boolean {
       break;
 
     case 0x9:
-      sne2(nibbles);
+      sneReg(nibbles);
       break;
 
     case 0xa:
@@ -464,7 +464,7 @@ function executeInstruction(opcode: number): boolean {
       break;
 
     case 0xb:
-      jp2(nibbles);
+      jpv0Addr(nibbles);
       break;
 
     case 0xc:
@@ -483,14 +483,14 @@ function executeInstruction(opcode: number): boolean {
     case 0xf:
       if (b === 0x5 && a === 0x5) lda(nibbles);
       else if (b === 0x6 && a === 0x5) ldb(nibbles);
-      else if (a === 0x5) ld6(nibbles);
+      else if (a === 0x5) lddtvx(nibbles);
 
-      if (a === 0x7) ld4(nibbles);
-      if (a === 0xa) ld5(nibbles);
-      if (a === 0x8) ld7(nibbles);
-      if (a === 0xe) add3(nibbles);
-      if (a === 0x9) ld8(nibbles);
-      if (a === 0x3) ld9(nibbles);
+      if (a === 0x7) ldvxdt(nibbles);
+      if (a === 0xa) ldkey(nibbles);
+      if (a === 0x8) ldstvx(nibbles);
+      if (a === 0xe) addivx(nibbles);
+      if (a === 0x9) ldfont(nibbles);
+      if (a === 0x3) ldbcd(nibbles);
   }
 
   return increment;
