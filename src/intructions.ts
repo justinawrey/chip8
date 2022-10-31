@@ -38,7 +38,7 @@ const masks: BitMasks = {
  * This instruction is only used on the old computers on which Chip-8 was originally implemented.
  * Ignored by modern interpreters but included here for posterity.
  */
-const sys: Instruction = () => {};
+const _sys: Instruction = () => {};
 
 /**
  * 00e0 - CLS
@@ -270,7 +270,9 @@ const ldi: Instruction = ({ c, b, a }) => {
  * Jump to location nnn + V0.
  * The program counter is set to nnn plus the value of V0.
  */
-const jpv0Addr: Instruction = (_nibbles) => {};
+const jpv0Addr: Instruction = ({ c, b, a }) => {
+  registers.programCounter = ((c << 8) | (b << 4) | a) + registers.v0;
+};
 
 /**
  * Cxkk - RND Vx, byte
@@ -417,8 +419,10 @@ function executeInstruction(opcode: number): boolean {
   switch (d) {
     case 0x0:
       if (a === 0x0) cls(nibbles);
-      if (a === 0xe) ret(nibbles);
-      sys(nibbles);
+      if (a === 0xe) {
+        ret(nibbles);
+        increment = false;
+      }
       break;
 
     case 0x1:
@@ -428,6 +432,7 @@ function executeInstruction(opcode: number): boolean {
 
     case 0x2:
       call(nibbles);
+      increment = false;
       break;
 
     case 0x3:
@@ -472,6 +477,7 @@ function executeInstruction(opcode: number): boolean {
 
     case 0xb:
       jpv0Addr(nibbles);
+      increment = false;
       break;
 
     case 0xc:
