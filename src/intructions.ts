@@ -1,6 +1,6 @@
 import { clearDisplay, toggleTile } from "./display.ts";
 import { checkKey, checkKeys } from "./io.ts";
-import memoryMap from "./ram.ts";
+import memoryMap, { FONT_SIZE, FONT_START } from "./ram.ts";
 import registers, { kk, nnn, reg, stack } from "./registers.ts";
 
 interface Nibbles {
@@ -405,7 +405,9 @@ const addivx: Instruction = ({ c }) => {
  * Set I = location of sprite for digit Vx.
  * The value of I is set to the location for the hexadecimal sprite corresponding to the value of Vx.
  */
-const ldfont: Instruction = (_nibbles) => {};
+const ldfont: Instruction = ({ c }) => {
+  registers.addressIndex = (registers[reg(c)] * FONT_SIZE) + FONT_START;
+};
 
 /**
  * Fx33 - LD B, Vx
