@@ -1,5 +1,5 @@
 import { clearDisplay, toggleTile } from "./display.ts";
-import { checkKey } from "./io.ts";
+import { checkKey, checkKeys } from "./io.ts";
 import memoryMap from "./ram.ts";
 import registers, { kk, nnn, reg, stack } from "./registers.ts";
 
@@ -359,7 +359,15 @@ const ldvxdt: Instruction = ({ c }) => {
  * Wait for a key press, store the value of the key in Vx.
  * All execution stops until a key is pressed, then the value of that key is stored in Vx.
  */
-const ldkey: Instruction = (_nibbles) => {};
+const ldkey: Instruction = ({ c }) => {
+  while (true) {
+    const key = checkKeys();
+    if (key) {
+      registers[reg(c)] = parseInt(key, 16);
+      break;
+    }
+  }
+};
 
 /**
  * Fx15 - LD DT, Vx
