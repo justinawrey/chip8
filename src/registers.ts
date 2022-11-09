@@ -2,7 +2,7 @@ import { ROM_START } from "./ram.ts";
 
 type Registers = Record<string, number>;
 
-const stack: number[] = [];
+let stack: number[] = [];
 const registers: Registers = {
   // General purpose numbers
   v0: 0,
@@ -47,6 +47,7 @@ function resetRegisters(): void {
   }
 
   registers.programCounter = ROM_START;
+  stack = [];
 }
 
 export { kk, nnn, reg, registers as default, resetRegisters, stack };
