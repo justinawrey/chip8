@@ -376,7 +376,9 @@ const ldstvx: Instruction = ({ c }) => {
  * Set I = I + Vx.
  * The values of I and Vx are added, and the results are stored in I.
  */
-const addivx: Instruction = (_nibbles) => {};
+const addivx: Instruction = ({ c }) => {
+  registers.addressIndex += registers[reg(c)];
+};
 
 /**
  * Fx29 - LD F, Vx
