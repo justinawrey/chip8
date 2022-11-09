@@ -2,7 +2,7 @@ import registers, { resetRegisters } from "./registers.ts";
 import memoryMap, { loadRom } from "./ram.ts";
 import executeInstruction from "./intructions.ts";
 import { clearDisplay } from "./display.ts";
-import { keys, press, unpress } from "./io.ts";
+import { keys, pressKey, releaseKey } from "./io.ts";
 
 // Most chip8 programs perform well at
 // around 700 instructions per second.
@@ -51,8 +51,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   Object.keys(keys).forEach((key) => {
     const button = document.getElementById(`key-${key}`)!;
-    button.addEventListener("mousedown", () => press(key));
-    button.addEventListener("mouseup", () => unpress(key));
+    button.addEventListener("mousedown", () => pressKey(key));
+    button.addEventListener("mouseup", () => releaseKey(key));
   });
 
   const input = document.getElementsByTagName("input")[0];

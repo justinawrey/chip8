@@ -2,14 +2,30 @@ class Key {
   pressed = false;
 }
 
-function press(id: string) {
+function pressKey(id: string): void {
   const key = keys[id];
   key.pressed = true;
 }
 
-function unpress(id: string) {
+function releaseKey(id: string): void {
   const key = keys[id];
   key.pressed = false;
+}
+
+function checkKey(id: string): boolean {
+  const key = keys[id];
+  return key.pressed;
+}
+
+function checkKeys(): string | null {
+  for (const key in keys) {
+    const pressed = checkKey(key);
+    if (pressed) {
+      return key;
+    }
+  }
+
+  return null;
 }
 
 const keys: Record<string, Key> = {
@@ -31,4 +47,4 @@ const keys: Record<string, Key> = {
   F: new Key(),
 };
 
-export { keys, press, unpress };
+export { checkKey, checkKeys, keys, pressKey, releaseKey };
