@@ -1,4 +1,5 @@
 import { clearDisplay, toggleTile } from "./display.ts";
+import { checkKey } from "./io.ts";
 import memoryMap from "./ram.ts";
 import registers, { kk, nnn, reg, stack } from "./registers.ts";
 
@@ -322,7 +323,12 @@ const drw: Instruction = ({ c, b, a }) => {
  * Skip next instruction if key with the value of Vx is pressed.
  * Checks the keyboard, and if the key corresponding to the value of Vx is currently in the down position, PC is increased by 2.
  */
-const skp: Instruction = (_nibbles) => {};
+const skp: Instruction = ({ c }) => {
+  const key = registers[reg(c)].toString(16);
+  if (checkKey(key)) {
+    registers.programCounter += 2;
+  }
+};
 
 /**
  * ExA1 - SKNP Vx
@@ -330,7 +336,12 @@ const skp: Instruction = (_nibbles) => {};
  * Skip next instruction if key with the value of Vx is not pressed.
  * Checks the keyboard, and if the key corresponding to the value of Vx is currently in the up position, PC is increased by 2.
  */
-const sknp: Instruction = (_nibbles) => {};
+const sknp: Instruction = ({ c }) => {
+  const key = registers[reg(c)].toString(16);
+  if (!checkKey(key)) {
+    registers.programCounter += 2;
+  }
+};
 
 /**
  * Fx07 - LD Vx, DT
