@@ -402,7 +402,11 @@ const ldbcd: Instruction = (_nibbles) => {};
  * Store registers V0 through Vx in memory starting at location I.
  * The interpreter copies the values of registers V0 through Vx into memory, starting at the address in I.
  */
-const lda: Instruction = (_nibbles) => {};
+const lda: Instruction = ({ c }) => {
+  for (let i = 0; i <= c; i++) {
+    memoryMap[registers.addressIndex + i] = registers[reg(i)];
+  }
+};
 
 /**
  * Fx65 - LD Vx, [I]
@@ -410,7 +414,11 @@ const lda: Instruction = (_nibbles) => {};
  * Read registers V0 through Vx from memory starting at location I.
  * The interpreter reads values from memory starting at location I into registers V0 through Vx.
  */
-const ldb: Instruction = (_nibbles) => {};
+const ldb: Instruction = ({ c }) => {
+  for (let i = 0; i <= c; i++) {
+    registers[reg(i)] = memoryMap[registers.addressIndex + i];
+  }
+};
 
 /**
  * Executes the given 2 byte intruction as specified by opcode.
