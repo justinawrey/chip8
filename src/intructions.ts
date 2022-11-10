@@ -469,7 +469,6 @@ function executeInstruction(opcode: number): boolean {
       if (a === 0x0) cls(nibbles);
       if (a === 0xe) {
         ret(nibbles);
-        increment = false;
       }
       break;
 

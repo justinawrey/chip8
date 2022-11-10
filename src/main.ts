@@ -6,29 +6,54 @@ import { keys, pressKey, releaseKey } from "./io.ts";
 
 // Most chip8 programs perform well at
 // around 700 instructions per second.
-const STABLE_EXEC_SPEED = 700;
+const CPU_EXEC_SPEED = 700;
+// Both DT and ST are updated at 60Hz.
+const TIMER_EXEC_SPEED = 60;
 const ONE_SECOND = 1000;
 
-let running: number | undefined;
+let cpu: number | undefined;
+let dt: number | undefined;
+let st: number | undefined;
+
 function limitExecutionSpeed(
   cb: () => void,
-  limit: number = STABLE_EXEC_SPEED,
-): void {
-  running = setInterval(cb, ONE_SECOND / limit);
+  limit: number,
+): number {
+  return setInterval(cb, ONE_SECOND / limit);
 }
 
 function start(): void {
-  if (!running) {
-    limitExecutionSpeed(mainLoop);
+  if (!cpu) {
+    cpu = limitExecutionSpeed(mainLoop, CPU_EXEC_SPEED);
+  }
+
+  if (!dt) {
+    dt = limitExecutionSpeed(timerLoop("delayTimer"), TIMER_EXEC_SPEED);
+  }
+
+  if (!st) {
+    st = limitExecutionSpeed(timerLoop("soundTimer"), TIMER_EXEC_SPEED);
   }
 }
 
 function stop(): void {
-  clearInterval(running);
-  running = undefined;
+  clearInterval(cpu);
+  clearInterval(dt);
+  clearInterval(st);
+  cpu = undefined;
+  dt = undefined;
+  st = undefined;
 
   resetRegisters();
   clearDisplay();
+}
+
+function timerLoop(timer: "delayTimer" | "soundTimer"): () => void {
+  return () => {
+    if (registers[timer] > 0) {
+      registers[timer] -= 1;
+    }
+  };
 }
 
 function mainLoop(): void {

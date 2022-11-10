@@ -31,6 +31,17 @@ const _registers: Registers = {
 
 const registers = new Proxy(_registers, {
   set(obj, prop, value, receiver) {
+    // Handle 8-bit and 16-bit overflow
+    function wrap(value: number, max: number): number {
+      // Handle negative numbers
+      if (value < 0) {
+        value = Math.abs(value);
+        return max - (value % max);
+      }
+
+      return value % max;
+    }
+
     if (typeof prop === "symbol") {
       return Reflect.set(obj, prop, value, receiver);
     }
@@ -40,13 +51,13 @@ const registers = new Proxy(_registers, {
     if (
       prop.startsWith("v") || prop === "delayTimer" || prop === "soundTimer"
     ) {
-      return Reflect.set(obj, prop, value % 256, receiver);
+      return Reflect.set(obj, prop, wrap(value, 256), receiver);
     }
 
     // Unsigned 16-bit registers can hold values from 0-65535.
     // These are the address index register and the program counter.
     if (prop === "addressIndex" || prop === "programCounter") {
-      return Reflect.set(obj, prop, value % 65536, receiver);
+      return Reflect.set(obj, prop, wrap(value, 65536), receiver);
     }
 
     return false;
