@@ -239,7 +239,7 @@ const subn: Instruction = ({ c, b }) => {
  * If the most-significant bit of Vx is 1, then VF is set to 1, otherwise to 0. Then Vx is multiplied by 2.
  */
 const shl: Instruction = ({ c }) => {
-  registers.vF = (registers[reg(c)] & 0x80) === 1 ? 1 : 0;
+  registers.vF = ((registers[reg(c)] & 0x80) >> 7) === 1 ? 1 : 0;
   registers[reg(c)] *= 2;
 };
 
