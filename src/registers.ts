@@ -3,7 +3,7 @@ import { ROM_START } from "./ram.ts";
 type Registers = Record<string, number>;
 
 let stack: number[] = [];
-const registers: Registers = {
+const _registers: Registers = {
   // General purpose numbers
   v0: 0,
   v1: 0,
@@ -22,12 +22,36 @@ const registers: Registers = {
   vE: 0,
   vF: 0,
 
-  // Specific purpose numbers
+  // Specific purpose registers
   addressIndex: 0,
   delayTimer: 0,
   soundTimer: 0,
   programCounter: ROM_START,
 };
+
+const registers = new Proxy(_registers, {
+  set(obj, prop, value, receiver) {
+    if (typeof prop === "symbol") {
+      return Reflect.set(obj, prop, value, receiver);
+    }
+
+    // Unsigned 8-bit registers can hold values from 0-255.
+    // These are the general purpose registers, the delay timer, and the sound timer.
+    if (
+      prop.startsWith("v") || prop === "delayTimer" || prop === "soundTimer"
+    ) {
+      return Reflect.set(obj, prop, value % 256, receiver);
+    }
+
+    // Unsigned 16-bit registers can hold values from 0-65535.
+    // These are the address index register and the program counter.
+    if (prop === "addressIndex" || prop === "programCounter") {
+      return Reflect.set(obj, prop, value % 65536, receiver);
+    }
+
+    return false;
+  },
+});
 
 function reg(which: number): string {
   return `v${Number(which).toString(16).toUpperCase()}`;
