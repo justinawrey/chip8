@@ -82,6 +82,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const button = document.getElementById(`key-${key}`)!;
     button.addEventListener("mousedown", () => pressKey(key));
     button.addEventListener("mouseup", () => releaseKey(key));
+    globalThis.addEventListener("keydown", (e) => {
+      if (e.key === key.toLowerCase()) {
+        pressKey(key);
+        button.classList.add("pressed");
+      }
+    });
+
+    globalThis.addEventListener("keyup", (e) => {
+      if (e.key === key.toLowerCase()) {
+        releaseKey(key);
+        button.classList.remove("pressed");
+      }
+    });
   });
 
   const select = document.getElementById("rom")!;
