@@ -1,5 +1,5 @@
 const canvas = document.getElementsByTagName("canvas")[0];
-const ctx = canvas.getContext("2d", { willReadFrequently: true })!;
+const ctx = canvas.getContext("2d")!;
 
 // Each "chip8 tile" will be equivalent to 10 actual pixels in the browser.
 // This means that the canvas element in the browser has a true size of 640px by 320px.
@@ -7,9 +7,19 @@ const NUM_TILES_WIDTH = 64;
 const NUM_TILES_HEIGHT = 32;
 const TILE_DIMENSION = 10;
 
+const WHITE = "#FFFFFF";
+const BLACK = "#000000";
+const GREY = "#EEEEEE";
+const SLATE = "#333333";
+
 // A tile is 'on' when its black, and 'off' when its white.
-const BLACK = "#000";
-const WHITE = "#FFF";
+const displayState: boolean[] = new Array(
+  NUM_TILES_WIDTH * NUM_TILES_HEIGHT,
+).fill(false);
+
+function clearState(): void {
+  displayState.fill(false);
+}
 
 /**
  * Clears display.
@@ -25,6 +35,33 @@ function clearDisplay(): void {
   );
 }
 
+function draw(): void {
+  displayState.forEach((tile, i) => {
+    ctx.beginPath();
+    if (tile) {
+      ctx.fillStyle = inverted ? WHITE : BLACK;
+    } else {
+      ctx.fillStyle = inverted ? BLACK : WHITE;
+    }
+
+    const x = i % NUM_TILES_WIDTH;
+    const y = Math.floor(i / NUM_TILES_WIDTH);
+
+    ctx.rect(
+      x * TILE_DIMENSION,
+      y * TILE_DIMENSION,
+      TILE_DIMENSION,
+      TILE_DIMENSION,
+    );
+    ctx.fill();
+
+    if (grid) {
+      ctx.strokeStyle = inverted ? SLATE : GREY;
+      ctx.stroke();
+    }
+  });
+}
+
 /**
  * Toggles a tile at (x, y).
  * If the given tile is white, set to black.
@@ -35,24 +72,29 @@ function clearDisplay(): void {
  * @returns whether or not the tile was "erased", e.g. changed from black to white
  */
 function toggleTile(x: number, y: number): boolean {
-  const trueX = (x % NUM_TILES_WIDTH) * TILE_DIMENSION;
-  const trueY = (y % NUM_TILES_HEIGHT) * TILE_DIMENSION;
-  const [r, g, b] = ctx.getImageData(trueX, trueY, 1, 1).data;
+  const pos = y * NUM_TILES_WIDTH + x;
+  const on = displayState[pos];
   let erased = false;
 
   // Tile is black, set it to white
-  if (r === 0 && g === 0 && b === 0) {
-    ctx.fillStyle = WHITE;
+  if (on) {
+    displayState[pos] = false;
     erased = true;
+  } else {
+    displayState[pos] = true;
   }
 
-  // Tile is white, set it to black
-  if (r === 255 && g === 255 && b === 255) {
-    ctx.fillStyle = BLACK;
-  }
-
-  ctx.fillRect(trueX, trueY, TILE_DIMENSION, TILE_DIMENSION);
   return erased;
 }
 
-export { clearDisplay, toggleTile };
+let grid = false;
+function setGrid(to: boolean) {
+  grid = to;
+}
+
+let inverted = false;
+function toggleTheme() {
+  inverted = !inverted;
+}
+
+export { clearDisplay, clearState, draw, setGrid, toggleTheme, toggleTile };

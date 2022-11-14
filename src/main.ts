@@ -1,7 +1,13 @@
 import registers, { resetRegisters } from "./registers.ts";
 import memoryMap, { loadRom } from "./ram.ts";
 import executeInstruction from "./intructions.ts";
-import { clearDisplay } from "./display.ts";
+import {
+  clearDisplay,
+  clearState,
+  draw,
+  setGrid,
+  toggleTheme,
+} from "./display.ts";
 import { keys, pressKey, releaseKey } from "./io.ts";
 
 // Most chip8 programs perform well at
@@ -46,6 +52,7 @@ function stop(): void {
 
   resetRegisters();
   clearDisplay();
+  clearState();
 }
 
 function timerLoop(timer: "delayTimer" | "soundTimer"): () => void {
@@ -65,6 +72,8 @@ function mainLoop(): void {
   if (increment) {
     registers.programCounter += 2;
   }
+
+  draw();
 }
 
 // Entry point to the program
@@ -88,4 +97,13 @@ document.addEventListener("DOMContentLoaded", () => {
     stop();
     file.arrayBuffer().then(loadRom);
   });
+
+  const gridToggle = document.getElementById("grid")!;
+  gridToggle.addEventListener(
+    "change",
+    (e) => setGrid((e.target as HTMLInputElement).checked),
+  );
+
+  const themeToggle = document.getElementById("theme")!;
+  themeToggle.addEventListener("change", toggleTheme);
 });
