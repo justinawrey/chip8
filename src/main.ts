@@ -78,24 +78,25 @@ function mainLoop(): void {
 
 // Entry point to the program
 document.addEventListener("DOMContentLoaded", () => {
-  const startBtn = document.getElementById("start")!;
-  const stopBtn = document.getElementById("stop")!;
-  startBtn.addEventListener("click", start);
-  stopBtn.addEventListener("click", stop);
-
   Object.keys(keys).forEach((key) => {
     const button = document.getElementById(`key-${key}`)!;
     button.addEventListener("mousedown", () => pressKey(key));
     button.addEventListener("mouseup", () => releaseKey(key));
   });
 
-  const input = document.getElementsByTagName("input")[0];
-  input.addEventListener("change", () => {
-    const file = input.files?.[0];
-    if (!file) return;
+  const select = document.getElementById("rom")!;
+  select.addEventListener("change", async (e) => {
+    const rom = (e.target as HTMLSelectElement).value;
+    if (rom === "default") {
+      stop();
+      return;
+    }
+
+    const res = await fetch(`rom/${rom}.ch8`);
+    res.arrayBuffer().then((buffer) => loadRom(new Uint8Array(buffer)));
 
     stop();
-    file.arrayBuffer().then(loadRom);
+    start();
   });
 
   const gridToggle = document.getElementById("grid")!;

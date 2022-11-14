@@ -9,45 +9,55 @@
 </head>
 
 <body>
-  <div class="main">
-    <div class="header">
-      <input type="file" id="file" name="file" />
-      <button id="start">Start</button>
-      <button id="stop">Stop</button>
-    </div>
+  <div class="container">
+    <div class="main">
+      <canvas id="canvas" width="640" height="320"></canvas>
 
-    <canvas id="canvas" width="640" height="320"></canvas>
-
-    <span>
-      <button id="key-1">1</button>
-      <button id="key-2">2</button>
-      <button id="key-3">3</button>
-      <button id="key-C">C</button>
-    </span>
-    <span>
-      <button id="key-4">4</button>
-      <button id="key-5">5</button>
-      <button id="key-6">6</button>
-      <button id="key-D">D</button>
-    </span>
-    <span>
-      <button id="key-7">7</button>
-      <button id="key-8">8</button>
-      <button id="key-9">9</button>
-      <button id="key-E">E</button>
-    </span>
-    <span>
-      <button id="key-A">A</button>
-      <button id="key-0">0</button>
-      <button id="key-B">B</button>
-      <button id="key-F">F</button>
-    </span>
-    <br />
-    <div>
-      <input type="checkbox" id="grid" checked>
-      <label for="grid">Show grid</label>
-      <input type="checkbox" id="theme" checked>
-      <label for="theme">Invert colors</label>
+      <div class="sidebar">
+        <div>
+          <label for="rom">ROM:</label>
+          <select id="rom" name="rom">
+            <option value="default">Select option</option>
+            <option value="tetris">Tetris</option>
+            <option value="pong">Pong</option>
+            <option value="guess">Guess</option>
+          </select>
+        </div>
+        <div>
+          <input type="checkbox" id="grid" checked>
+          <label for="grid">Show grid</label>
+        </div>
+        <div>
+          <input type="checkbox" id="theme" checked>
+          <label for="theme">Invert colors</label>
+        </div>
+        <div class="controls">
+          <span>
+            <button id="key-1">1</button>
+            <button id="key-2">2</button>
+            <button id="key-3">3</button>
+            <button id="key-C">C</button>
+          </span>
+          <span>
+            <button id="key-4">4</button>
+            <button id="key-5">5</button>
+            <button id="key-6">6</button>
+            <button id="key-D">D</button>
+          </span>
+          <span>
+            <button id="key-7">7</button>
+            <button id="key-8">8</button>
+            <button id="key-9">9</button>
+            <button id="key-E">E</button>
+          </span>
+          <span>
+            <button id="key-A">A</button>
+            <button id="key-0">0</button>
+            <button id="key-B">B</button>
+            <button id="key-F">F</button>
+          </span>
+        </div>
+      </div>
     </div>
   </div>
 </body>
@@ -71,17 +81,22 @@
 
   .main {
     display: flex;
-    flex-direction: column;
     align-items: center;
   }
 
-  .header {
-    width: 100%;
+  .sidebar {
     display: flex;
+    flex-direction: column;
+    margin-left: 20px;
   }
 
   #start {
     margin-left: auto
+  }
+
+  .controls {
+    display: flex;
+    flex-direction: column;
   }
 </style>
 
