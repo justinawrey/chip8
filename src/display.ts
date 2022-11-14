@@ -87,12 +87,12 @@ function toggleTile(x: number, y: number): boolean {
   return erased;
 }
 
-let grid = false;
+let grid = true;
 function setGrid(to: boolean) {
   grid = to;
 }
 
-let inverted = false;
+let inverted = true;
 function toggleTheme() {
   inverted = !inverted;
 }
