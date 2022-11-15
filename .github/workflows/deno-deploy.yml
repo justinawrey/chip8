@@ -19,6 +19,6 @@ jobs:
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
-          project: "justinawrey-chip8"
+          project: "chip8"
           entrypoint: https://deno.land/std/http/file_server.ts
           root: static
