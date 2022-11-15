@@ -18,7 +18,7 @@ jobs:
           deno-version: v1.x
 
       - name: Bundle
-        run: deno task bundle
+        run: deno task build
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
