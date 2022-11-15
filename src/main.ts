@@ -5,6 +5,7 @@ import {
   clearDisplay,
   clearState,
   draw,
+  drawTitleScreen,
   setGrid,
   toggleTheme,
 } from "./display.ts";
@@ -78,6 +79,8 @@ function mainLoop(): void {
 
 // Entry point to the program
 document.addEventListener("DOMContentLoaded", () => {
+  drawTitleScreen();
+
   Object.keys(keys).forEach((key) => {
     const button = document.getElementById(`key-${key}`)!;
     button.addEventListener("mousedown", () => pressKey(key));
@@ -102,6 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const rom = (e.target as HTMLSelectElement).value;
     if (rom === "default") {
       stop();
+      drawTitleScreen();
       return;
     }
 
@@ -115,9 +119,27 @@ document.addEventListener("DOMContentLoaded", () => {
   const gridToggle = document.getElementById("grid")!;
   gridToggle.addEventListener(
     "change",
-    (e) => setGrid((e.target as HTMLInputElement).checked),
+    (e) => {
+      setGrid((e.target as HTMLInputElement).checked);
+
+      if (
+        (document.getElementById("rom") as HTMLSelectElement).value ===
+          "default"
+      ) {
+        draw();
+      }
+    },
   );
 
   const themeToggle = document.getElementById("theme")!;
-  themeToggle.addEventListener("change", toggleTheme);
+  themeToggle.addEventListener("change", () => {
+    toggleTheme();
+
+    if (
+      (document.getElementById("rom") as HTMLSelectElement).value ===
+        "default"
+    ) {
+      draw();
+    }
+  });
 });
