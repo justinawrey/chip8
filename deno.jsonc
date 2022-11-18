@@ -1,9 +1,11 @@
 {
   "tasks": {
-    "clean": "rm -rf static/dist",
-    "bundle": "mkdir -p static/dist && deno bundle src/main.ts static/dist/chip8.bundle.js",
-    "build": "deno task clean && deno task bundle",
-    "serve": "deno run --allow-net --allow-read https://deno.land/std@0.161.0/http/file_server.ts static",
+    "clean": "rm -f static/dist/chip8.bundle.js static/dist/chip8.bundle.min.js static/dist/index.html",
+    "bundle": "deno bundle src/main.ts static/dist/chip8.bundle.js",
+    "minify:js": "deno run -A npm:terser static/dist/chip8.bundle.js -o static/dist/chip8.bundle.min.js -c -m",
+    "minify:html": "deno run -A npm:html-minifier --minify-css true --output static/dist/index.html static/index.html",
+    "build": "deno task clean && deno task bundle && deno task minify:js && deno task minify:html",
+    "serve": "deno run --allow-net --allow-read https://deno.land/std@0.161.0/http/file_server.ts static/dist",
     "dev": "deno task bundle --watch & deno task serve"
   },
   "compilerOptions": {
