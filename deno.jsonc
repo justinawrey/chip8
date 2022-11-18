@@ -6,7 +6,7 @@
     "minify:html": "deno run -A npm:html-minifier --minify-css true --output static/dist/index.html static/index.html",
     "build": "deno task clean && deno task bundle && deno task minify:js && deno task minify:html",
     "serve": "deno run --allow-net --allow-read https://deno.land/std@0.161.0/http/file_server.ts static/dist",
-    "dev": "deno task bundle --watch & deno task serve"
+    "dev": "deno task build --watch & deno task serve"
   },
   "compilerOptions": {
     "lib": [
