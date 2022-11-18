@@ -25,4 +25,4 @@ jobs:
         with:
           project: "chip8"
           entrypoint: https://deno.land/std/http/file_server.ts
-          root: static
+          root: static/dist
