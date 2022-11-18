@@ -1,4 +1,4 @@
-import registers, { resetRegisters } from "./registers.ts";
+import registers, { drawRegisters, resetRegisters } from "./registers.ts";
 import memoryMap, { loadRom } from "./ram.ts";
 import executeInstruction from "./intructions.ts";
 import {
@@ -75,6 +75,10 @@ function mainLoop(): void {
   }
 
   draw();
+
+  if ((document.getElementById("hardware") as HTMLInputElement).checked) {
+    drawRegisters();
+  }
 }
 
 // Entry point to the program
@@ -140,6 +144,24 @@ document.addEventListener("DOMContentLoaded", () => {
         "default"
     ) {
       draw();
+    }
+  });
+
+  const hardwareToggle = document.getElementById("hardware")!;
+  hardwareToggle.addEventListener("change", (e) => {
+    const checked = (e.target as HTMLInputElement).checked;
+
+    if (checked) {
+      const hardware = document.createElement("div");
+      hardware.id = "reg-hardware";
+      for (const register in registers) {
+        const div = document.createElement("div");
+        div.id = `reg-${register}`;
+        hardware.appendChild(div);
+      }
+      document.getElementsByClassName("container")[0].appendChild(hardware);
+    } else {
+      document.getElementById("reg-hardware")?.remove();
     }
   });
 });

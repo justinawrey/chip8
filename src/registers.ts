@@ -29,6 +29,29 @@ const _registers: Registers = {
   programCounter: ROM_START,
 };
 
+const registerDisplayNames: Record<keyof typeof _registers, string> = {
+  v0: "V0",
+  v1: "V1",
+  v2: "V2",
+  v3: "V3",
+  v4: "V4",
+  v5: "V5",
+  v6: "V6",
+  v7: "V7",
+  v8: "V8",
+  v9: "V9",
+  vA: "VA",
+  vB: "VB",
+  vC: "VC",
+  vD: "VD",
+  vE: "VE",
+  vF: "VF",
+  addressIndex: "I",
+  delayTimer: "DT",
+  soundTimer: "ST",
+  programCounter: "PC",
+};
+
 const registers = new Proxy(_registers, {
   set(obj, prop, value, receiver) {
     // Handle 8-bit and 16-bit overflow
@@ -85,4 +108,23 @@ function resetRegisters(): void {
   stack = [];
 }
 
-export { kk, nnn, reg, registers as default, resetRegisters, stack };
+function drawRegisters(): void {
+  for (const register in registers) {
+    const el = document.getElementById(`reg-${register}`);
+    if (el) {
+      el.innerHTML = `<b>${registerDisplayNames[register]}</b>: ${
+        registers[register]
+      }`;
+    }
+  }
+}
+
+export {
+  drawRegisters,
+  kk,
+  nnn,
+  reg,
+  registers as default,
+  resetRegisters,
+  stack,
+};
