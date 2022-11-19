@@ -110,6 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (rom === "default") {
       stop();
       drawTitleScreen();
+      drawRegisters();
       return;
     }
 
@@ -148,18 +149,33 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   const hardwareToggle = document.getElementById("hardware")!;
+  function addRegisters() {
+    let i = 0;
+    const hardware = document.createElement("div");
+    hardware.id = "reg-hardware";
+
+    let row = document.createElement("span");
+    for (const register in registers) {
+      i++;
+      const div = document.createElement("div");
+      div.id = `reg-${register}`;
+      row.appendChild(div);
+
+      if (i % 4 === 0) {
+        hardware.appendChild(row);
+        row = document.createElement("span");
+      }
+    }
+    document.getElementsByClassName("container")[0].appendChild(hardware);
+    drawRegisters();
+  }
+  addRegisters();
+
   hardwareToggle.addEventListener("change", (e) => {
     const checked = (e.target as HTMLInputElement).checked;
 
     if (checked) {
-      const hardware = document.createElement("div");
-      hardware.id = "reg-hardware";
-      for (const register in registers) {
-        const div = document.createElement("div");
-        div.id = `reg-${register}`;
-        hardware.appendChild(div);
-      }
-      document.getElementsByClassName("container")[0].appendChild(hardware);
+      addRegisters();
     } else {
       document.getElementById("reg-hardware")?.remove();
     }
