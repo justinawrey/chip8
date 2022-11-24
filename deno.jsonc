@@ -6,7 +6,7 @@
     "bundle:dev": "deno bundle src/main.ts static/dist/chip8.bundle.js",
     "build": "deno task clean && deno task minify:html && deno task bundle",
     "serve": "deno run --allow-net --allow-read https://deno.land/std@0.161.0/http/file_server.ts static/dist",
-    "dev": "deno task build --watch & deno task serve"
+    "dev": "deno task bundle:dev --watch & deno task serve"
   },
   "compilerOptions": {
     "lib": [

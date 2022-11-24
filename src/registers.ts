@@ -108,15 +108,32 @@ function resetRegisters(): void {
   stack = [];
 }
 
+const oldRegisters = {
+  ...registers,
+};
+let firstDrawDone = false;
+
 function drawRegisters(): void {
   for (const register in registers) {
+    // Don't update DOM for registers that haven't changed
+    // Always draw for the first time
+    const value = registers[register];
+    if (firstDrawDone) {
+      if (value === oldRegisters[register]) {
+        continue;
+      }
+
+      oldRegisters[register] = value;
+    }
+
+    // Update DOM
     const el = document.getElementById(`reg-${register}`);
     if (el) {
-      el.innerHTML = `<b>${registerDisplayNames[register]}</b>: ${
-        registers[register]
-      }`;
+      el.innerHTML = `<b>${registerDisplayNames[register]}</b>: ${value}`;
     }
   }
+
+  firstDrawDone = true;
 }
 
 export {
