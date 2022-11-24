@@ -64,6 +64,24 @@ function timerLoop(timer: "delayTimer" | "soundTimer"): () => void {
   };
 }
 
+let throttlePause = false;
+// deno-lint-ignore ban-types
+const throttle = (callback: Function, time: number) => {
+  //don't run the function if throttlePause is true
+  if (throttlePause) return;
+
+  //set throttlePause to true after the if condition. This allows the function to be run once
+  throttlePause = true;
+
+  //setTimeout runs the callback within the specified time
+  setTimeout(() => {
+    callback();
+
+    //throttlePause is set to false once the function has been called, allowing the throttle function to loop
+    throttlePause = false;
+  }, time);
+};
+
 function mainLoop(): void {
   const highByte = memoryMap[registers.programCounter];
   const lowByte = memoryMap[registers.programCounter + 1];
@@ -75,7 +93,7 @@ function mainLoop(): void {
   }
 
   if ((document.getElementById("hardware") as HTMLInputElement).checked) {
-    drawRegisters();
+    throttle(drawRegisters, 46);
   }
 }
 
@@ -108,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (rom === "default") {
       stop();
       drawTitleScreen();
-      drawRegisters();
+      drawRegisters(true);
       return;
     }
 

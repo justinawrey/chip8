@@ -100,11 +100,14 @@ function kk(b: number, a: number): number {
 }
 
 function resetRegisters(): void {
-  for (const register in registers) {
-    registers[register] = 0;
-  }
+  [registers, oldRegisters].forEach((registers) => {
+    for (const register in registers) {
+      registers[register] = 0;
+    }
 
-  registers.programCounter = ROM_START;
+    registers.programCounter = ROM_START;
+  });
+
   stack = [];
 }
 
@@ -113,18 +116,17 @@ const oldRegisters = {
 };
 let firstDrawDone = false;
 
-function drawRegisters(): void {
+function drawRegisters(force = false): void {
   for (const register in registers) {
     // Don't update DOM for registers that haven't changed
     // Always draw for the first time
     const value = registers[register];
-    if (firstDrawDone) {
+    if (firstDrawDone && !force) {
       if (value === oldRegisters[register]) {
         continue;
       }
-
-      oldRegisters[register] = value;
     }
+    oldRegisters[register] = value;
 
     // Update DOM
     const el = document.getElementById(`reg-${register}`);
