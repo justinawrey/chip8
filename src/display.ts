@@ -214,7 +214,6 @@ function drawTitleScreen() {
   toggleTile(45, 14);
 
   // 8
-
   toggleTile(48, 8);
   toggleTile(48, 9);
   toggleTile(48, 10);
