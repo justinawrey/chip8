@@ -1,1 +1,4 @@
 .DS_Store
+static/dist/chip8.bundle.min.js
+static/dist/chip8.bundle.js
+static/dist/index.html

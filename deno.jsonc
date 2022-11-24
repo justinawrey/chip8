@@ -3,6 +3,7 @@
     "clean": "rm -f static/dist/chip8.bundle.min.js static/dist/index.html",
     "minify:html": "deno run -A npm:html-minifier --minify-css true --output static/dist/index.html static/index.html",
     "bundle": "deno run -A scripts/build.ts && deno task minify:html",
+    "bundle:dev": "deno bundle src/main.ts static/dist/chip8.bundle.js",
     "build": "deno task clean && deno task minify:html && deno task bundle",
     "serve": "deno run --allow-net --allow-read https://deno.land/std@0.161.0/http/file_server.ts static/dist",
     "dev": "deno task build --watch & deno task serve"
