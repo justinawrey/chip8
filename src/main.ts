@@ -74,8 +74,6 @@ function mainLoop(): void {
     registers.programCounter += 2;
   }
 
-  draw();
-
   if ((document.getElementById("hardware") as HTMLInputElement).checked) {
     drawRegisters();
   }
@@ -126,26 +124,14 @@ document.addEventListener("DOMContentLoaded", () => {
     "change",
     (e) => {
       setGrid((e.target as HTMLInputElement).checked);
-
-      if (
-        (document.getElementById("rom") as HTMLSelectElement).value ===
-          "default"
-      ) {
-        draw();
-      }
+      draw();
     },
   );
 
   const themeToggle = document.getElementById("theme")!;
   themeToggle.addEventListener("change", () => {
     toggleTheme();
-
-    if (
-      (document.getElementById("rom") as HTMLSelectElement).value ===
-        "default"
-    ) {
-      draw();
-    }
+    draw();
   });
 
   const hardwareToggle = document.getElementById("hardware")!;

@@ -1,4 +1,4 @@
-import { clearDisplay, toggleTile } from "./display.ts";
+import { clearDisplay, draw, toggleTile } from "./display.ts";
 import { checkKey, checkKeys } from "./io.ts";
 import memoryMap, { FONT_SIZE, FONT_START } from "./ram.ts";
 import registers, { kk, nnn, reg, stack } from "./registers.ts";
@@ -533,6 +533,7 @@ function executeInstruction(opcode: number): boolean {
 
     case 0xd:
       drw(nibbles);
+      draw();
       break;
 
     case 0xe:
