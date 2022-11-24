@@ -1,6 +1,6 @@
 import registers, { drawRegisters, resetRegisters } from "./registers.ts";
 import memoryMap, { loadRom } from "./ram.ts";
-import executeInstruction from "./intructions.ts";
+import executeInstruction, { resetDrawn } from "./intructions.ts";
 import {
   clearDisplay,
   clearState,
@@ -54,6 +54,7 @@ function stop(): void {
   resetRegisters();
   clearDisplay();
   clearState();
+  resetDrawn();
 }
 
 function timerLoop(timer: "delayTimer" | "soundTimer"): () => void {
@@ -142,14 +143,14 @@ document.addEventListener("DOMContentLoaded", () => {
     "change",
     (e) => {
       setGrid((e.target as HTMLInputElement).checked);
-      draw();
+      draw(true);
     },
   );
 
   const themeToggle = document.getElementById("theme")!;
   themeToggle.addEventListener("change", () => {
     toggleTheme();
-    draw();
+    draw(true);
   });
 
   const hardwareToggle = document.getElementById("hardware")!;
@@ -171,7 +172,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
     document.getElementsByClassName("container")[0].appendChild(hardware);
-    drawRegisters();
+    drawRegisters(true);
   }
   addRegisters();
 

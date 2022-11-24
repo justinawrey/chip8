@@ -114,14 +114,13 @@ function resetRegisters(): void {
 const oldRegisters = {
   ...registers,
 };
-let firstDrawDone = false;
 
 function drawRegisters(force = false): void {
   for (const register in registers) {
     // Don't update DOM for registers that haven't changed
     // Always draw for the first time
     const value = registers[register];
-    if (firstDrawDone && !force) {
+    if (!force) {
       if (value === oldRegisters[register]) {
         continue;
       }
@@ -134,8 +133,6 @@ function drawRegisters(force = false): void {
       el.innerHTML = `<b>${registerDisplayNames[register]}</b>: ${value}`;
     }
   }
-
-  firstDrawDone = true;
 }
 
 export {

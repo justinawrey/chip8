@@ -16,9 +16,10 @@ const SLATE = "#333333";
 const displayState: boolean[] = new Array(
   NUM_TILES_WIDTH * NUM_TILES_HEIGHT,
 ).fill(false);
+const oldState: boolean[] = [...displayState];
 
 function clearState(): void {
-  displayState.fill(false);
+  [displayState, oldState].forEach((state) => state.fill(false));
 }
 
 /**
@@ -35,8 +36,16 @@ function clearDisplay(): void {
   );
 }
 
-function draw(): void {
+function draw(force = false): void {
   displayState.forEach((tile, i) => {
+    if (!force) {
+      // Pixel hasn't changed, don't redraw
+      if (tile === oldState[i]) {
+        return;
+      }
+    }
+    oldState[i] = tile;
+
     ctx.beginPath();
     if (tile) {
       ctx.fillStyle = inverted ? WHITE : BLACK;
@@ -99,6 +108,7 @@ function toggleTheme() {
 
 function drawTitleScreen() {
   displayState.fill(false);
+  oldState.fill(false);
 
   // C
   toggleTile(11, 8);
@@ -125,7 +135,6 @@ function drawTitleScreen() {
   toggleTile(10, 18);
 
   // H
-
   toggleTile(19, 11);
   toggleTile(19, 12);
   toggleTile(19, 13);
@@ -251,7 +260,7 @@ function drawTitleScreen() {
   toggleTile(51, 13);
   toggleTile(52, 13);
 
-  draw();
+  draw(true);
 }
 
 export {

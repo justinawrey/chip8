@@ -450,6 +450,11 @@ const ldb: Instruction = ({ c }) => {
   }
 };
 
+let drawn = false;
+function resetDrawn() {
+  drawn = false;
+}
+
 /**
  * Executes the given 2 byte intruction as specified by opcode.
  *
@@ -533,7 +538,8 @@ function executeInstruction(opcode: number): boolean {
 
     case 0xd:
       drw(nibbles);
-      draw();
+      draw(!drawn);
+      drawn = true;
       break;
 
     case 0xe:
@@ -557,4 +563,4 @@ function executeInstruction(opcode: number): boolean {
   return increment;
 }
 
-export default executeInstruction;
+export { executeInstruction as default, resetDrawn };
