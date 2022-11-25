@@ -47,9 +47,11 @@ function stop(): void {
   clearInterval(cpu);
   clearInterval(dt);
   clearInterval(st);
+  clearTimeout(drawRegisterTimer);
   cpu = undefined;
   dt = undefined;
   st = undefined;
+  drawRegisterTimer = undefined;
 
   resetRegisters();
   clearDisplay();
@@ -66,6 +68,7 @@ function timerLoop(timer: "delayTimer" | "soundTimer"): () => void {
 }
 
 let throttlePause = false;
+let drawRegisterTimer: number | undefined;
 // deno-lint-ignore ban-types
 const throttle = (callback: Function, time: number) => {
   //don't run the function if throttlePause is true
@@ -75,7 +78,7 @@ const throttle = (callback: Function, time: number) => {
   throttlePause = true;
 
   //setTimeout runs the callback within the specified time
-  setTimeout(() => {
+  drawRegisterTimer = setTimeout(() => {
     callback();
 
     //throttlePause is set to false once the function has been called, allowing the throttle function to loop
