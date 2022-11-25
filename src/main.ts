@@ -52,6 +52,7 @@ function stop(): void {
   dt = undefined;
   st = undefined;
   drawRegisterTimer = undefined;
+  throttlePause = false;
 
   resetRegisters();
   clearDisplay();
