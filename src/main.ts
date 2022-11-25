@@ -111,14 +111,14 @@ document.addEventListener("DOMContentLoaded", () => {
     button.addEventListener("mousedown", () => pressKey(key));
     button.addEventListener("mouseup", () => releaseKey(key));
     globalThis.addEventListener("keydown", (e) => {
-      if (e.key === key.toLowerCase()) {
+      if (e.key === key.toLowerCase() || e.key === key) {
         pressKey(key);
         button.classList.add("pressed");
       }
     });
 
     globalThis.addEventListener("keyup", (e) => {
-      if (e.key === key.toLowerCase()) {
+      if (e.key === key.toLowerCase() || e.key === key) {
         releaseKey(key);
         button.classList.remove("pressed");
       }
