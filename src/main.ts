@@ -1,6 +1,9 @@
 import registers, { drawRegisters, resetRegisters } from "./registers.ts";
 import memoryMap, { loadRom } from "./ram.ts";
-import executeInstruction, { resetDrawn } from "./intructions.ts";
+import executeInstruction, {
+  drawInstruction,
+  resetDrawn,
+} from "./intructions.ts";
 import {
   clearDisplay,
   clearState,
@@ -47,12 +50,10 @@ function stop(): void {
   clearInterval(cpu);
   clearInterval(dt);
   clearInterval(st);
-  clearTimeout(drawRegisterTimer);
   cpu = undefined;
   dt = undefined;
   st = undefined;
-  drawRegisterTimer = undefined;
-  throttlePause = false;
+  throttleCounter = 0;
 
   resetRegisters();
   clearDisplay();
@@ -68,37 +69,25 @@ function timerLoop(timer: "delayTimer" | "soundTimer"): () => void {
   };
 }
 
-let throttlePause = false;
-let drawRegisterTimer: number | undefined;
-// deno-lint-ignore ban-types
-const throttle = (callback: Function, time: number) => {
-  //don't run the function if throttlePause is true
-  if (throttlePause) return;
-
-  //set throttlePause to true after the if condition. This allows the function to be run once
-  throttlePause = true;
-
-  //setTimeout runs the callback within the specified time
-  drawRegisterTimer = setTimeout(() => {
-    callback();
-
-    //throttlePause is set to false once the function has been called, allowing the throttle function to loop
-    throttlePause = false;
-  }, time);
-};
-
+let throttleCounter = 0;
 function mainLoop(): void {
+  throttleCounter++;
+
   const highByte = memoryMap[registers.programCounter];
   const lowByte = memoryMap[registers.programCounter + 1];
   const opcode = (highByte << 8) | lowByte;
 
-  const increment = executeInstruction(opcode);
+  const [increment, instruction] = executeInstruction(opcode);
   if (increment) {
     registers.programCounter += 2;
   }
 
   if ((document.getElementById("hardware") as HTMLInputElement).checked) {
-    throttle(drawRegisters, 46);
+    if (throttleCounter > 18) {
+      drawRegisters();
+      drawInstruction(instruction);
+      throttleCounter = 0;
+    }
   }
 }
 
@@ -176,6 +165,10 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
     document.getElementsByClassName("container")[0].appendChild(hardware);
+    const instructions = document.createElement("ul");
+    instructions.id = "instructions-list";
+    hardware.appendChild(instructions);
+
     drawRegisters(true);
   }
   addRegisters();

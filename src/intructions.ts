@@ -461,7 +461,7 @@ function resetDrawn() {
  * @param opcode the opcode of the 2 byte instruction to be executed.
  * @returns whether or not pc should be incremented by 2 bytes
  */
-function executeInstruction(opcode: number): boolean {
+function executeInstruction(opcode: number): [boolean, string] {
   const d = (0xf000 & opcode) >> 12;
   const c = (0x0f00 & opcode) >> 8;
   const b = (0x00f0 & opcode) >> 4;
@@ -469,21 +469,28 @@ function executeInstruction(opcode: number): boolean {
   const nibbles = { d, c, b, a };
 
   let increment = true;
+  let instruction: string = "default";
   switch (d) {
     case 0x0:
-      if (a === 0x0) cls(nibbles);
+      if (a === 0x0) {
+        cls(nibbles);
+        instruction = "CLS";
+      }
       if (a === 0xe) {
         ret(nibbles);
+        instruction = "RET";
       }
       break;
 
     case 0x1:
       jpAddr(nibbles);
+      instruction = "JP";
       increment = false;
       break;
 
     case 0x2:
       call(nibbles);
+      instruction = "CALL";
       increment = false;
       break;
 
@@ -560,7 +567,20 @@ function executeInstruction(opcode: number): boolean {
       if (a === 0x3) ldbcd(nibbles);
   }
 
-  return increment;
+  return [increment, instruction];
 }
 
-export { executeInstruction as default, resetDrawn };
+function drawInstruction(instruction: string) {
+  const list = document.getElementById("instructions-list");
+  if (!list) return;
+
+  const item = document.createElement("li");
+  item.innerText = instruction;
+  list.insertBefore(item, list.firstChild);
+
+  if (list.children.length > 4 && list.lastChild) {
+    list.removeChild(list.lastChild);
+  }
+}
+
+export { drawInstruction, executeInstruction as default, resetDrawn };
